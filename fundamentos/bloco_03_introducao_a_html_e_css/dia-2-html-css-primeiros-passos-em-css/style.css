@@ -1,12 +1,18 @@
 body {
     font-size: 16px;
+    font-style: oblique;
+    line-height: 38px;
 }
 
 h1 {
     font-family: sans-serif;
+    text-decoration: underline;
 }
+
 p {
     font-weight: 600;
     font-size: 3em;
+    line-height: 2em;
+    text-align: justify;
 }
 
