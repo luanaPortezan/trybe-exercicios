@@ -1,0 +1,81 @@
+body {
+    font-size: 16px;
+    font-style: oblique;
+    line-height: 38px;
+}
+
+h1 {
+    font-family: sans-serif;
+    text-decoration: underline;
+}
+
+p {
+    font-weight: 600;
+    font-size: 3em;
+    line-height: 2em;
+    text-align: justify;
+}
+
+/* estilar cada paragrafo para cada pessoa*/
+
+.virginia {
+    background-color: ;
+}
+
+.karlinha {
+    background-color: ;
+}
+
+.lucy {
+    background-color: ;
+}
+
+.mayu {
+    background-color: ;
+}
+
+.marcelo {
+    background-color: ;
+}
+
+.paulinha {
+    background-color: ;
+}
+
+.sahra {
+    background-color: ;
+}
+
+.leila {
+    background-color: ;
+}
+
+.livio {
+    background-color: ;
+}
+
+.gabriel {
+    background-color: ;
+}
+
+.lucas {
+    background-color: ;
+}
+
+.bruno {
+    background-color: ;
+}
+
+.nat {
+    background-color: ;
+}
+
+.ellen {
+    background-color: ;
+}
+
+.trybe {
+    background-color: ;
+}
+
+
