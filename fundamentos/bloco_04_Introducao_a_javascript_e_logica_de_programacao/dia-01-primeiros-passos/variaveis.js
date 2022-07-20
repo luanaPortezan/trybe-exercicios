@@ -1,7 +1,7 @@
 //valores das constantes e  variáveis
-const myName = "Luana";
-const birthCity = "Planaltina";
-let birthYear = 1989;
+const myName = "Luana"; //string
+const birthCity = "Planaltina"; //string
+let birthYear = 1989; //number
 
 //imprimir
 console.log(myName);
