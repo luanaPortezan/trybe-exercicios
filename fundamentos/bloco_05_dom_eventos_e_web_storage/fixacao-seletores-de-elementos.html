@@ -1,11 +1,11 @@
 <!-- FIXAÇÃO! - SELETORES DE ELEMENTOS
-1. Recupere o elemento que contém o título da página e faça algo com ele, como alterá-lo para o nome do seu filme favorito.
-2. Agora recupere o segundo parágrafo e use sua criatividade para alterá-lo.
-3. Por fim, recupere o subtítulo e altere-o também.
+1. Recupere o elemento que contém o título da página e faça algo com ele, como alterá-lo para o nome do seu filme favorito.✅
+2. Agora recupere o segundo parágrafo e use sua criatividade para alterá-lo.✅
+3. Por fim, recupere o subtítulo e altere-o também.✅
 
-1. Adicione uma classe igual para os dois parágrafos.
-2. Recupere os seus parágrafos via código JavaScript, usando a função getElementsByClassName;
-3. Altere algum estilo do primeiro deles.
+1. Adicione uma classe igual para os dois parágrafos.✅
+2. Recupere os seus parágrafos via código JavaScript, usando a função getElementsByClassName;✅
+3. Altere algum estilo do primeiro deles.✅
 4. Recupere o subtítulo e altere a cor dele usando a função getElementsByTagName.
 
 dica: Mas como fazer uma busca que retorna vários elementos e não apenas o primeiro? Bem, para isso existe o querySelectorAll, que tem comportamento semelhante ao querySelector. A diferença é simples: ela retorna uma array com todos os elementos que "casem" com a sua seleção, ao invés de retornar apenas o primeiro deles.Tanto o querySelector quanto o querySelectorAll acessam CSS Selectors de todos os tipos. Ou seja, eles podem acessar muito além de valores de ids e classes. Para saber mais sobre CSS Selectors.
@@ -16,13 +16,24 @@ dica: Mas como fazer uma busca que retorna vários elementos e não apenas o pri
   <body>
     <header>
       <h2 id="page-title">Título</h2>
-      <p id="paragraph">Dê uma cor para este parágrafo!</p>
+      <p id="paragraph" class="paragrafo">Dê uma cor para este parágrafo!</p>
       <h4 id="subtitle">Subtítulo</h4>
-      <p id="second-paragraph">Segundo parágrafo!</p>
+      <p id="second-paragraph" class="paragrafo">Segundo parágrafo!</p>
     </header>
     <script>
       const paragraph = document.getElementById("paragraph");
       paragraph.style.color = "red";
+
+      document.getElementById("page-title").innerText = "Mulan";
+      document.getElementById("second-paragraph").innerText = "Para salvar seu pai doente de servir no Exército Imperial, uma jovem destemida se disfarça de homem para lutar contra os invasores do norte da China.";
+      document.getElementById("subtitle").innerText = "Sinopse:"
+
+      const paragrafo = document.getElementsByClassName("paragrafo")[0];
+      paragrafo.style.color = "blue";
+
+      const subtitle = document.getElementsByTagName("subtitle")[0];
+      subtitle.style.color = "green";
+
     </script>
   </body>
 </html>
