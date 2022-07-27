@@ -8,7 +8,7 @@ let info = {
 //Bem-vinda, Margarida
 //RESOLUÇÃO ABAIXO:
 
-console.log("Bem vinda " + info.personagem);
+console.log("Bem vinda," + info.personagem);
 
 //2 - Insira no objeto uma nova propriedade com o nome de chave 'recorrente' e o valor 'Sim' e, em seguida, imprima o objeto no console. Valor esperado no console:
 //{
@@ -49,6 +49,21 @@ for (let key in info) {
 // Pato Donald e Christmas on Bear Mountain, Dell's Four Color Comics #178
 // Namorada do personagem principal nos quadrinhos do Pato Donald e O último MacPatinhas
 // Ambos recorrentes // Atenção para essa última linha!
+//RESOLUÇÃO ABAIXO:
+
+let information = {
+  personagem: "Tio Patinhas",
+  origem: "Christmas on Bear Mountain, Dell's Four Color Comics #178",
+  nota: "O último MacPatinhas",
+  recorrente: 'Sim'
+};
+
+
+console.log(info[personagem] + "e " + information[personagem]);
+console.log(info[origem] + "e " + information[origem]);
+console.log(info[nota] + "e " + information[nota]);
+console.log(info[personagem] + "e " + information[personagem]);
+
 // Usando o objeto abaixo, faça os exercícios a seguir:
 // 
 // let leitor = {
@@ -63,9 +78,6 @@ for (let key in info) {
 //     },
 //   ],
 // };
-//RESOLUÇÃO ABAIXO:
-
-
 
 // 🚀 6 - Acesse as chaves nome, sobrenome e titulo, que está dentro da chave livrosFavoritos, e faça um console.log no seguinte formato: "O livro favorito de Julia Pessoa se chama 'O Pior Dia de Todos'".
 //RESOLUÇÃO ABAIXO:
