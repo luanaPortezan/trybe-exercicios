@@ -2,7 +2,7 @@
 function changeText() {
   let paragraph = document.getElementsByTagName('p')[1];
   paragraph.innerHTML = "A porta de entrada para sua carreira em tecnologia";
-};
+}
 changeText();
 
 // Requisito 2 - Crie e execute uma função que mude a cor do quadrado amarelo para o verde da Trybe (rgb(76,164,109)).
@@ -32,14 +32,14 @@ function changeToUpperCase() {
   for (let index = 0; index < paragraphAll.length; index += 1) {
     paragraphAll[index].innerHTML = paragraphAll[index].innerHTML.toUpperCase();
   }
-};
+}
 changeToUpperCase();
 
 // Requisito 6 - Crie e execute uma função que exiba o conteúdo de todas as tags <p> no console.
 function displayContent() {
   let displayParagraph = document.getElementsByTagName('p');
   for (let index = 0; index < displayParagraph.length; index += 1) {
-    console.log(displayContent[index].innerHTML)
+    console.log(displayParagraph[index].innerHTML);
   }
 }
 displayContent();
