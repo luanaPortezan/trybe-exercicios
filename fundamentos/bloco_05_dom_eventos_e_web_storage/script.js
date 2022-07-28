@@ -29,7 +29,6 @@ changeNameTitle();
 // Requisito 5 - Crie e execute uma função que modifique todo o texto da tag <p> para maiúsculo.
 function changeToUpperCase() {
   let paragraphAll = document.getElementsByTagName('p');
-
   for (let index = 0; index < paragraphAll.length; index += 1) {
     paragraphAll[index].innerHTML = paragraphAll[index].innerHTML.toUpperCase();
   }
@@ -37,3 +36,10 @@ function changeToUpperCase() {
 changeToUpperCase();
 
 // Requisito 6 - Crie e execute uma função que exiba o conteúdo de todas as tags <p> no console.
+function displayContent() {
+  let displayParagraph = document.getElementsByTagName('p');
+  for (let index = 0; index < displayParagraph.length; index += 1) {
+    console.log(displayContent[index].innerHTML)
+  }
+}
+displayContent();
