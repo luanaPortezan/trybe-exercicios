@@ -17,15 +17,18 @@
 </head>
 <body>
   <label for="email-input">E-mail:
-    <input type="email" name="email" id="email-input" placeholder="Digite seu e-mail" required>
+    <input type="email" name="email" id="email-input" placeholder="Digite seu e-mail" autocomplete="off" autofocus required>
   </label>
   <br>
+  <br>
   <label for="password-input">Senha:
-    <input type="password" name="senha" id = "password-input" required>
+    <input type="password" name="senha" id = "password-input" placeholder="Digite sua senha" required>
   </label>
+  <br>
   <br>
   <form action="" method="get">
     <input type="checkbox" id="lembrar" name="checkbox-input" value="check">Lembre-me
-  
+  </form>
+  <button type="submit">Entrar</button>
 </body>
 </html>
