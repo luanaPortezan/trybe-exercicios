@@ -1,40 +1,12 @@
-//const sum = (value1, value2) => value1 + value2;
-
-// const sum = (value1, value2) => value1 + value2;
-// console.log(sum(2, 3));
-
-// const sum = (value1, value2) => value1 + value2;
-// console.log(sum(2, '3')); // resultado: 23
-
-// const sum = (value1, value2) => {
-//   if (typeof value1 !== 'number' || typeof value2 !== 'number') {
-//     return 'Os valores devem ser numéricos';
-//   }
-//   return value1 + value2;
-// };
-// console.log(sum(2, '3'));
-
-// const sum = (value1, value2) => {
-//   if (typeof value1 !== 'number' || typeof value2 !== 'number') {
-//     throw new Error('Os valores devem ser numéricos');
-//   }
-//   return value1 + value2;
-// };
-// console.log(sum(2, '3'));
-
-const verifyIsNumber = (value1, value2) => {
-  if (typeof value1 !== 'number' || typeof value2 !== 'number') {
-    throw new Error('Os valores devem ser numéricos');
-  }
-};
-
-const sum = (value1, value2) => {
-  try {
-    verifyIsNumber(value1, value2);
-    return value1 + value2;
-  } catch (error) {
-    return error.message;
-  }
-};
-
-console.log(sum(2, '3'));
+function sum() {
+  const value1 = document.getElementById('value1').value;
+  const value2 = document.getElementById('value2').value;
+  const result = Number(value1) + Number(value2);
+  document.getElementById('result').innerHTML = `Resultado: ${result}`;
+  document.getElementById('value1').value = '';
+  document.getElementById('value2').value = '';
+}
+window.onload = () => {
+  const button = document.getElementById('button');
+  button.addEventListener('click', sum);
+}
