@@ -246,4 +246,4 @@ console.log(reportStatus('Natalia', estudantes));
 // O código teve uma redução drástica no número de linhas! Primeiro, fizemos um find para buscar e retornar os dados do estudante. O objeto foi retornado e salvo na variável studentsInfo, depois o map foi usado para percorrer as matérias do objeto retornado e salvar o que se queria em um array da forma desejada.
 // Relembre algumas HOFs com a imagem a seguir: 
 
-// imagens
+// imagens 
