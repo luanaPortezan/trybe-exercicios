@@ -38,4 +38,4 @@ const lotteryResult = (myNumber, callback) => {
 
 console.log(lotteryResult(2, numberChecker));
 
-// Se você por acaso não comprendeu a sintaxe com ? e : não se preocupe. Este tipo de validação é conhecido como "operador ternário" e é uma alternativa para se realizar uma validação if, else onde ? é equivalente ao if e : ao else. Desta forma, o que está acontecendo é: O retorno da função numberChecker é verdadeiro ? se sim retorne 'Lucky day, you won!', se não :, retorne 'Try Again!'.
+// Se você por acaso não compreendeu a sintaxe com ? e : não se preocupe. Este tipo de validação é conhecido como "operador ternário" e é uma alternativa para se realizar uma validação if, else onde ? é equivalente ao if e : ao else. Desta forma, o que está acontecendo é: O retorno da função numberChecker é verdadeiro ? se sim retorne 'Lucky day, you won!', se não :, retorne 'Try Again!'.
