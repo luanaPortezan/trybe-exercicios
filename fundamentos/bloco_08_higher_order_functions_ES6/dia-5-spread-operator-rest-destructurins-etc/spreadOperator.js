@@ -80,7 +80,7 @@ const specialFruit = ['', '', ''];
 const additionalItens = ['', '', ''];
 
 const fruitSalad = (fruit, additional) => {
-  // Esreva sua função aqui
+  // Escreva sua função aqui
 };
 
 console.log(fruitSalad(specialFruit, additionalItens));
