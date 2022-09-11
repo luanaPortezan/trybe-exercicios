@@ -11,7 +11,7 @@
 // Dentro da função crie uma variável result.
 // Crie a lógica para retornar o fatorial de N!.
 // Imprima no terminal "Esse é o fatorial resultado da função" (Lembre-se de utilizar template literals nesse momento).
-// Dica: Armazene a chamada da função em uma varíavel para imprimir no terminal seu resultado.
+// Dica: Armazene a chamada da função em uma variável para imprimir no terminal seu resultado.
 
 const factorial = number => {
   let result = 1;
