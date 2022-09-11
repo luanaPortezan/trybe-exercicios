@@ -48,7 +48,7 @@ console.log(customer4);
 // Agora, suponha que seja necessário adicionar algumas novas propriedades ao objeto, como a naturalidade, a data de nascimento e o estado civil.
 // Essas novas propriedades serão adicionadas de acordo com o valor de algumas variáveis.
 
-const customer = {
+const customer5 = {
   firstName: 'Roberto',
   age: 22,
   job: 'Teacher',
@@ -56,11 +56,11 @@ const customer = {
 
 let newKey = 'lastName';
 const lastName = 'Ferreira';
-customer[newKey] = lastName;
+customer5[newKey] = lastName;
 newKey = 'fullName';
-const fullName = `${customer.firstName} ${customer.lastName}`;
-customer[newKey] = fullName;
-console.log(customer);
+const fullName = `${customer5.firstName} ${customer5.lastName}`;
+customer5[newKey] = fullName;
+console.log(customer5);
 
 // No exemplo acima, você viu que há diferentes formas de associar chaves e valores a um objeto.
 // Agora, para praticar, crie uma função que receba três parâmetros, sendo eles: um objeto, o nome de uma chave e o seu valor. O retorno dessa função deve ser o objeto já com a nova chave adicionada nele.
