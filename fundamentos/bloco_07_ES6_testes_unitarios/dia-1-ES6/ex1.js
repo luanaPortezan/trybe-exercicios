@@ -24,6 +24,7 @@
 // }
 // testingScope(true);
 
+
 const testingScope1 = escopo => { 
   if (escopo === true) { 
     let ifScope = 'Não devo ser utilizada fora do meu escopo (if)';
@@ -37,7 +38,7 @@ const testingScope1 = escopo => {
 
 testingScope1(true);
 
-
+// -------- EXERCÍCIO 2: ---------
 // 🚀 Crie uma função que retorne um array em ordem crescente.
 
     // const oddsAndEvens = [13, 3, 4, 10, 7, 2];
@@ -50,6 +51,7 @@ testingScope1(true);
 
     // console.log(oddsAndEvens); // será necessário alterar essa linha 😉
     
+    //RESOLUÇÃO 1:
     // const sortOddsAndEvens = (array) => {
     //   for (let index = 1; index < array.length; index += 1) {
     //     for (let secondIndex = 0; secondIndex < index; secondIndex += 1) {
@@ -68,6 +70,14 @@ testingScope1(true);
 
     //   const oddsAndEvens = [13, 3, 4, 10, 7, 2];
 
+
+      
+// Crie uma função que faça com que o array oddsAndEvens fique em ordem crescente;
+// Utilize template literals para que a chamada console.log(<seu código>oddsAndEvens<seu código>); retorne a frase "Os números 2,3,4,7,10,13 se encontram ordenados de forma crescente!".
+// Bônus (opcional): tente fazer o mesmo exercício utilizando o método array.sort(). Spoiler: É possível realizar uma função que ordene qualquer array de números.
+
+// RESOLUÇÃO 2:
+const oddsAndEvens = [13, 3, 4, 10, 7, 2];
 const sortArrayBonus = (array) => {
   const sortOddsAndEvens = array.sort((a, b) => a - b);
   return sortOddsAndEvens;
@@ -75,7 +85,3 @@ const sortArrayBonus = (array) => {
 
 const sortedArrayBonus = sortArrayBonus(oddsAndEvens);
 console.log(`Os números ${sortedArrayBonus} se encontram ordenados de forma crescente!`);
-      
-// Crie uma função que faça com que o array oddsAndEvens fique em ordem crescente;
-// Utilize template literals para que a chamada console.log(<seu código>oddsAndEvens<seu código>); retorne a frase "Os números 2,3,4,7,10,13 se encontram ordenados de forma crescente!".
-// Bônus (opcional): tente fazer o mesmo exercício utilizando o método array.sort(). Spoiler: É possível realizar uma função que ordene qualquer array de números.
