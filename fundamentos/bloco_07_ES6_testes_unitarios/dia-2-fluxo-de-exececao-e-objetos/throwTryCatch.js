@@ -68,7 +68,7 @@ console.log(sum6(2, '3'));
 // Como sempre, dê uma olhada na documentação oficial para aprofundar seus conhecimentos.
 // Para reforçar ainda mais o conceito de try/catch, assista o vídeo a seguir:
 
-// exemplo da Tamara:
+// exemplo da Tamara - vídeo:
 
 const verificaValores = (a, b) => {
   if (typeof a !== 'number' || typeof b !== 'number') {
