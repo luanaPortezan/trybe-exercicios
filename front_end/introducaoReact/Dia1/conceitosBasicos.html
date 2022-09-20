@@ -1,0 +1,175 @@
+---------------- Conceitos básicos ---------------- 
+
+Vamos lá ! Aperte o cinto e dedique-se 100% no processo de aprendizagem sobre React .
+
+Essa jornada certamente vai te deixar cada vez mais perto do mercado de trabalho!
+
+Antes de tudo, veremos sobre o gerenciador de pacotes que utilizaremos durante o curso, o npm.
+
+A primeira coisa a se saber é que npm é o gerenciador de pacotes em si, ou seja, ele é quem será utilizado para instalar os pacotes em nossas aplicações React, enquanto o npx executa o comando de um pacote sem instalá-lo diretamente.
+
+Como o create-react-app é um pacote que tem como função única a criação de todos os arquivos necessários para termos um app React, não rodamos ele mais de uma vez por projeto e nem precisamos do pacote instalado em nossas máquinas, por isso SEMPRE executamos ele com o npx e não com o npm.
+
+Antes de iniciarmos o conteúdo, vamos testar se temos o npm e o npx estão funcionando corretamente? Para isso, criaremos uma pasta, em qualquer lugar, e vamos acessá-la por meio do terminal. Uma vez que estamos dentro da pasta, no terminal, vamos executar o comando abaixo:
+
+// npx create-react-app testando-meu-computador
+
+Após o npx terminar de executar, ele nos mostra um mini tutorial, em que teremos uma explicação sobre os principais comandos, como na foto abaixo.
+
+foto
+
+Em seguida acesse a pasta:
+
+// cd testando-meu-computador
+
+Para iniciar o servidor de uma aplicação React use o comando abaixo, certificando-se de que está dentro da pasta do projeto:
+
+// $ npm start
+
+Após o npm start terminar de carregar (pode demorar um pouco), ele irá abrir uma aba em seu navegador e você verá algo parecido com o exemplo abaixo, o que significa que tudo está funcionando corretamente.
+
+
+ ---------------- Conceitos iniciais ---------------- 
+
+React surgiu através de uma necessidade do Facebook, onde o código era grande e de difícil manutenção. Por isso as pessoas engenheiras do Facebook precisaram pensar em uma solução escalável e eficiente, nessa necessidade nasceu o React. Com o tempo essa tecnologia se tornou open-source, conquistou muitos adeptos e grandes empresas passaram a utilizá-la. Veja esse artigo para saber mais sobre a história do React! (Link também disponível em Recursos Adicionais)
+
+O React é, atualmente, uma das principais bibliotecas Javascript para construção de interfaces de usuário. Esta poderosa ferramenta foi criada pelos times de desenvolvimento do Facebook com objetivo de organizar, componentizar e, consequentemente, tornar muito mais eficiente cada parte das aplicações que a utilizam.
+
+A ideia principal é tornar possível dividir a sua aplicação em pequenos blocos, reutilizáveis ou não, que podem fazer a gestão das suas próprias informações através do seu estado, ou seja, reagir a eventos, interações, dados, etc. Toda vez que houver uma mudança em um componente, o React atua especificamente na renderização dele, sem que seja necessário atualizar os outros blocos.
+
+A componentização permite ainda utilizar funções específicas, estilizações, testes e outras tecnologias no exato local em que ela será utilizada, permitindo que qualquer possível refatoração do código se torne mais simples, bem endereçada e fácil de se encontrar.
+
+O exemplo mais prático de uma aplicação React é a própria documentação dela. Além de ser possivel visualizar as principais componentizações, como header, menu lateral, conteúdo principal, barra lateral, submenus e footer, conseguimos acessar menus diferentes sem que a página recarregue. Super eficiente, certo? Existem diversas outras ferramentas, como o próprio Facebook e o Slido, que funcionam da mesma forma dinâmica.
+
+É muito importante para uma pessoa desenvolvedora saber fazer a leitura e interpretação da documentação de uma ferramenta a ser utilizada! Alguns dos exemplos que você verá nesta aula, inclusive, podem ser similares aos encontrados na documentação do React. Vale a pena dar uma conferida e aprofundar seus conhecimentos!
+
+Legal, não é mesmo? Vamos conhecer agora o ecossistema que envolve essa tecnologia, começando pelo JSX.
+
+
+---------------- JSX ---------------- 
+
+O JSX, ou Javascript Syntax Extension, como o próprio nome sugere, é uma extensão de sintaxe para Javascript. Sua utilização é recomendada pela documentação do React, pois ela demonstra como a interface deverá se comportar, de forma lógica e descritiva.
+
+Vamos ver um exemplo:
+
+const element = <h1>Hello, world!</h1>;
+
+⚠️ Atenção ⚠️
+Os códigos com a sintaxe JSX só funcionam dentro do contexto do React, ou seja, não funcionam em JS puro ou rodando diretamente no console do navegador, por exemplo.
+Você pode brincar com o JSX em exemplos interativos do CodeSandbox que aparecem no conteúdo ou em scripts .js ou .jsx que importam o React em projetos criados pelo comando npx create-react-app.
+
+A construção de um elemento JSX é bem parecida com um elemento HTML, com pequenas diferenças para que não haja conflito do HTML com o JS. Um exemplo disso é a declaração de uma class no HTML, que é substituída por className no JSX, pois haveria conflito de sintaxe com as classes do JS.
+
+Caso fossemos declarar a mesma variável sem o JSX, precisaríamos utilizar funções como o createElement que recebe como parâmetro um componente, um objeto com as props e o conteúdo que será encapsulado por este componente. Seriam necessárias sequências relativamente longas de instruções de código para conseguirmos montar e manipular uma árvore de componentes. Para visualizarmos essa complexidade, vamos refazer o código acima sem o JSX:
+
+const element = React.createElement("h1", null, "Hello, world")
+
+Agora imagine uma aplicação inteira sendo construída dessa forma. Ficaria muito mais difícil de ser compreendida, certo? O JSX encaixa-se perfeitamente para resolver este dilema.
+
+É importante frisar que o uso do JSX em aplicações React não é obrigatório, mas a complexidade da construção de uma aplicação fica menor e o código fica mais intuitivo quando o utilizamos.
+
+---- Incorporando expressões no JSX ----
+
+Por ser um código Javascript, o JSX permite injeções de algoritmos dentro da estrutura HTML. Portanto, é possível que se aplique diretamente na estrutura da aplicação códigos que renderizarão outras diversas expressões, por exemplo:
+
+const nome = 'Jorge Maravilha';
+const element = <h1>Hello, {nome}</h1>;
+
+E se aprofundarmos um pouco mais chamando uma função na nossa constante element?
+
+function nomeCompleto (nome, sobrenome) {
+  return `${nome} ${sobrenome}`;
+}
+
+const element = <h1>Hello, {nomeCompleto('Jorge', 'Maravilha')}</h1>;
+
+Agora, vamos incorporar a nossa constante element na função helloWorld, retornar um código JSX e encapsulá-la em uma div:
+
+function helloWorld (nome, sobrenome) {
+  return <h1>Hello, {`${nome} ${sobrenome}`}</h1>;
+}
+
+const element = helloWorld('Jorge', 'Maravilha');
+const container = <div>{element}</div>;
+
+No JSX é necessário substituir class por className, para evitar conflitos entre o Javascript e o HTML, mas também podemos utilizar expressões Javascript para atribuir valor à este atributo.
+
+const nome = 'Jorge Maravilha';
+const classe = 'hello-class';
+const element = <h1 className={classe}>Hello, {nome}</h1>;
+
+Bom demais, né?
+
+🚀 Se liga nesse foguete!
+
+Os exercícios destacados com 🚀 são os fundamentais pra você ir bem no projeto! Todos os exercícios vão contribuir com sua formação mas fique de olho nesses! 👀
+
+--- 🚀 Exercício 1 ---
+Para fixar, crie um elemento JSX que recebe o valor “Hello, JSX” de uma constante chamada textJSX, e o incorpore em uma tag h1. Para facilitar, você pode fazer esse exercício diretamente no CodeSandbox.
+
+--- ReactDOM ---
+O ReactDOM é o responsável por renderizar e atualizar seu código dentro do HTML, exibindo seus elementos React.
+
+Para entendermos como ele funciona, vamos fazer o seguinte: Criaremos um novo projeto React usando o create-react-app, ou usemos o projeto criado na seção inicial.
+
+Em seguida, vamos abrir o projeto e procurar pelo arquivo index.js. Esse é o arquivo raíz das nossas aplicações React e é nele que fazemos o vínculo dos nossos componentes React com o DOM do navegador, utilizando o ReactDOM.
+
+O ReactDOM precisa de 2 parâmetros para fazer esse vínculo:
+
+- O elemento do DOM final (esse elemento se encontra no arquivo public/index.html)
+- O componente React
+Com o React, a forma como manipulamos os elementos vai mudar. Inclusive é considerado uma má prática manipular o DOM no React diretamente como no JavaScript puro. Ou seja, não vamos mais utilizar as funções que manipulam o DOM, tais como appendChild, removeChild, querySelector, etc.
+
+Então como fazemos para, por exemplo, mudar o estilo de elementos se não podemos manipular o DOM diretamente?
+
+Resumidamente, no JavaScript puro é possível pegar os elementos via querySelector, por exemplo, e com algum addEventListener escutar um evento, chamar uma função e atribuir ou mudar uma propriedade desse elemento, certo? E no React como funciona?
+
+No React, cada componente pode receber um conjunto de informações (chamadas de props), ou ter informações contidas internamente (chamadas de estado). Toda vez que qualquer uma dessa informações for atualizada, a função ReactDOM.render irá aplicar as mudanças necessárias e o DOM será atualizado automaticamente.
+
+Aprenderemos sobre essas informações, props e estado, mais adiante conforme o andamento do módulo! Por hora, mantenha a calma e saiba que o React tem uma forma própria de atualizar a DOM e que nós ainda vamos estudar MUITO sobre isso ;)
+
+Talvez de início você tenha a sensação de que é mais fácil fazer tudo isso com JavaScript puro, mas com o andar do módulo e do curso, você verá que o uso do React vai simplificar, e muito, nossa vida e que projetos que seriam extremamente complexos com JavaScript puro se tornam bem mais aceitáveis com React.
+
+--- CSS e Import ---
+
+Para importar um arquivo que está dentro do próprio projeto ou que esteja em uma biblioteca externa, você pode utilizar o import, com a seguinte sintaxe:
+
+import nomeDaImportacao from 'caminhoDoArquivoOuNomeDaBiblioteca'
+
+Onde o nomeDaImportacao é a variável pela qual você acessará o módulo importado. Caso você queira importar algo que não seja a exportação default, será necessário colocar o nome do que está sendo importado entre chaves:
+
+import { nomeDaFuncaoImportada } from 'caminhoDoArquivoOuNomeDaBiblioteca'
+
+A origem do arquivo importado é indicada após o from, e pode ser um caminho relativo ou o nome da biblioteca que foi instalada no projeto:
+
+import React from 'react' // importando de uma biblioteca
+import Header from './components/Header.js' // importando de um caminho relativo
+
+A utilização de CSS (estilização) em componentes React não é nada muito diferente de como é feito no HTML, você deve criar um arquivo para manter todo o seu CSS e então deverá importá-lo onde você deseja utilizá-lo e colocar as classes e ids que você criou nos elementos da sua página.
+
+Para facilitar o entendimento veja o exemplo abaixo:
+
+/* App.css */
+.App {
+  background-color: #282c34;
+  text-align: center;
+}
+
+
+
+// App.js
+import React from 'react';
+import './App.css';
+
+function App() {
+  return (
+    <div className='App'>
+      <h1>APP</h1>
+    </div>
+  );
+}
+
+export default App;
+
+
+Se quiser ver um exemplo maior da importação e utilização do CSS, retorne ao app testando-meu-computador que você criou na seção de instalação, ao observar a estrutura você verá que não é nada muito diferente do que você já estava fazendo. Caso queira se aprofundar mais na utilização do CSS no React e também no import utilizado no arquivo App.js, vá até a seção de Recursos adicionais e dê uma olhada nas documentações sobre esses tópicos.
