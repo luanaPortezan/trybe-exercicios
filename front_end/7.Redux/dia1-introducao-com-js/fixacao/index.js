@@ -1,33 +1,47 @@
-import { legacy_createStore as createStore } from 'redux';
-import { composeWithDevTools } from '@redux-devtools/extension';
+import { legacy_createStore as createStore } from "redux";
+import { composeWithDevTools } from "@redux-devtools/extension";
 
-// 1. Criando o Reducer com Estado Inicial
-const INITIAL_STATE = { count: 0 };
+// 1. Criando o reducer com o estado inicial
+const INITIAL_STATE = { 
+  count: 0,
+};
+// console.log(INITIAL_STATE)
 
+// 5. depois de dispara a action chama o reducer que vai alterar o  nosso State
 const reducer = (state = INITIAL_STATE, action) => {
-  if (action.type === 'INCREMENT_COUNTER') {
-    return { count: state.count + 1 };
+  // if (action.type === "INCREMENT_COUNTER") {
+  //   return { count: state.count + 1 }
+  // }
+  // return state;
+  switch (action.type) {
+    case "INCREMENT_COUNTER":
+      return { 
+        ...state,
+        count: state.count + 1 
+      }
+    default:
+      return state;
   }
-  return state;
 };
 
-// 2. Criando a Store já com Redux Devtools
+// 2. Criando a store já com o redux dev/tools
 const store = createStore(reducer, composeWithDevTools());
 
-// 3. Criando a Action
-const action = { type: 'INCREMENT_COUNTER' };
+// 3. Criando a action
+const action = { type: "INCREMENT_COUNTER" };
 
-// 4. Disparando a Action
-const buttonEl = document.querySelector('button');
-buttonEl.addEventListener('click', () => 
-store.dispatch(action));
+// 4. Disparando a nossa action
+const incrementButton = document.querySelector("button");
+incrementButton.addEventListener("click", () => {
+// console.log("click");
+  store.dispatch(action);
+});
 
-// 5. Lendo do Estado global
+// 6. lendo as alterações do State
 store.subscribe(() => {
+  // console.log("os estado foi alterado");
   const globalState = store.getState();
-
-  const countEl = document.querySelector('h2');
-  countEl.innerHTML = globalState.count;
-
-  console.log('Estado atualizado !');
+  // console.log(globalState);
+  const counterElement = document.querySelector("h2");
+  counterElement.innerHTML = globalState.count;
 });
