@@ -1,0 +1,44 @@
+.form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: calc(100vh - 36px );
+  background-color: var(--grey);
+}
+
+.form label {
+  display: block;
+  margin-bottom: 1em;
+  width: 100%;
+  /* background-color: blueviolet; */
+  color: beige;
+}
+
+.form select {
+  display: block;
+  margin-bottom: 1em;
+  width: 100%;
+  /* background-color: green; */
+}
+
+.form input {
+  width: 100%;
+  /* background-color: brown; */
+}
+
+.form button {
+  background-color: var(--blue);
+}
+
+.form img {
+  margin-bottom: 1em;
+}
+
+.inputs {
+  width: 400px;
+  height: auto;
+  padding: 1em;
+  border-radius: 0.5em;
+  margin: 0 auto;
+}
