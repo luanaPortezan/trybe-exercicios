@@ -1,0 +1,59 @@
+version: "3"
+services:
+  frontend:
+    build: frontend/
+    restart: always
+    ports:
+      - 3000:3000
+    depends_on:
+      - backend
+    volumes:
+      - ./logs:/var/log/frontend    # caminho no computador : caminho no container
+      #neste caso, estamos mapeando uma pasta do nosso computador local (./logs) para uma pasta dentro do serviço de front-end (/var/log/frontend). Desta maneira, não precisamos criar volumes virtuais, pois estamos usando uma pasta do nosso próprio computador! 
+    networks:
+      - rede-virtual-1
+
+
+  backend:
+    build: backend/
+    restart: always
+    ports:
+      - 3001:3001
+    environment:
+      - DB_HOST=database
+    depends_on:
+      - database
+    networks:
+      - rede-virtual-1
+      - rede-virtual-2
+
+
+  database:
+    image: betrybe/docker-compose-example-database:v1
+    restart: always
+    volumes:
+      - dados-do-banco:/data/db    # nome do disco virtual : caminho no container (como este banco de dados é um MongoDB, seus dados são armazenados nesta pasta específica,)
+    networks:
+      - rede-virtual-2
+
+
+
+volumes:
+  dados-do-banco:       
+  
+  # volumes: são pastas dentro de um serviço que é persistente, ou seja, mesmo após descer o serviço, esta pasta ainda mantém seus arquivos na próxima vez que os serviços subirem. 
+  # Obs: Nesta chave, especificamos para o Compose que ele deve criar um volume virtual com o nome dados-do-banco. 
+  # Obs: Isso é feito pela nova chave volumes que está dentro do serviço database! Você pode perceber que esta chave é uma lista com um item e recebeu os dados no seguinte formato: <nome-do-volume>:<caminho-no-container-para-montar>. Ou seja: no serviço database, o caminho /data/db será persistido, mesmo se a gente descer e subir este serviço novamente! 
+
+networks:
+  rede-virtual-1:
+  rede-virtual-2:
+
+  # O Compose nos permite criar múltiplas REDES VIRTUAIS entre os SERVIÇOS:
+  # - O serviço front-end só precisa se comunicar diretamente com o back-end;
+  # - O serviço back-end precisa se comunicar tanto com o front-end quanto com o database;
+  # - O serviço database só precisa se comunicar diretamente com o back-end.
+
+
+  # atenção!!! 
+  # O Compose chama os containers orquestrados de serviço para possibilitar a criação de várias réplicas, desde que a situação se mostre necessária para isso. 

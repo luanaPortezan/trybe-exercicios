@@ -1,0 +1,30 @@
+# aula-docker-compose/
+# ├── backend
+# │   └── Dockerfile
+# ├── frontend
+# │   └── Dockerfile
+# └── docker-compose.yaml
+
+version: '3'
+services:
+  frontend:
+    build: frontend/    # Especificamos o contexto, ou seja, a pasta onde está o Dockerfile.
+    restart: on-failure # define que o container será reiniciado caso ocorra alguma falha apontada pelo [exit code], diferente de zero; obs: existem outras reinicialização.
+    ports:
+      - 3000:3000       # o primeiro parâmetro é sempre a porta do computador local e o segundo parâmetro é a porta exposta no container.
+    depends_on:
+      - backend         # Cada serviço do nosso arquivo docker-compose.yaml recebeu a chave depends_on, que é uma lista de quais serviços o Compose deve executar primeiro, antes de executar o serviço atual. Nesse exemplo, os serviços serão iniciados respeitando a ordem que especificamos: primeiro o serviço database será iniciado, depois o serviço backend e finalmente o serviço frontend!
+      
+  backend:
+    build: backend/     # Mesmo caso aqui.
+    restart: on-failure # Mesmo caso aqui.
+    ports:              # Mesmo caso aqui.
+      - 3001:3001       
+    environment:
+      - DB_HOST=database # A ideia de variáveis de ambiente é trazer mais dinamismo entre ambientes. Por exemplo: Na maioria das empresas, usualmente temos o ambiente de teste e o ambiente de produção, esses dois ambientes possuem nome de pessoa usuária e senha diferentes para cada ambiente. Deixar esses dados fixos ou expostos no código, engessaria a aplicação e seria inseguro. As variáveis de ambiente entram para reduzir esse problema. Tendo variáveis com o mesmo nome em cada ambiente, por exemplo DB_USER e DB_PASSWORD. Em cada ambiente a aplicação consegue se conectar em banco de dados diferentes, isolando assim o ambiente de teste e o de produção.
+    depends_on:
+      - database
+
+  database:
+    image: betrybe/docker-compose-example-database:v1    # Especificamos a Imagem Docker diretamente.
+    restart: on-failure
