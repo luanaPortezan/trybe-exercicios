@@ -1,0 +1,12 @@
+- Para rodar com a mensagem padrão que você criou no [CMD] execute:
+docker container run cowsay
+
+- Você também pode passar um parâmetro logo após o comando:
+docker container run cowsay Go Trybe!
+
+- Se quiser obter a lista com os outros animais, rode o comando:
+docker container run cowsay -l
+
+- Este comando vai rodar um leão com a frase #VQV TRYBE:
+docker container run cowsay -l
+docker container run cowsay -f moofasa "#VQV TRYBE"
