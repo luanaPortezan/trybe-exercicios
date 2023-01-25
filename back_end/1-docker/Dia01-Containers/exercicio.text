@@ -1,0 +1,36 @@
+Vamos juntar tudo o que aprendemos até aqui e exercitar mais ainda nosso aprendizado!
+
+🚀 1. No Docker Hub, utilizando a caixa de busca ("Search for great content"), busque pela imagem da Distribuição Linux Debian.
+Solução:
+No campo de busca do Docker Hub, você pode procurar por diversas imagens (incluindo softwares populares como o mysql, ou servidores da web, como o nginx), nesse caso, procuramos pela palavra chave debian.
+
+🚀 2. Uma vez que encontrar a imagem oficial, acesse-a (clicando em seu card) e verifique na página de detalhes. Confira se existe algum comando para baixar a imagem localmente sem ter que criar um contêiner para isso.
+Solução:
+Ao acessar a página de detalhes, logo de cara, a página já indica o comando docker pull <imagem>, esse comando faz apenas o download da imagem, sem o processo de criação e execução do container.
+
+🚀 3. Baixe a imagem utilizando a tag: stable-slim, que é uma versão reduzida da distribuição.
+Solução:
+Para executar esta ação, digite o comando docker pull:stable-slim. As tags também podem ser acessadas pela página de detalhes da imagem (onde também é fornecido o comando para executar).
+
+🚀 4. Após baixar a imagem para seu computador local, crie e execute um contêiner no modo interativo utilizando essa imagem como referência — não esqueça referenciar a tag.
+Solução:
+- Para criar e executar nosso container, usamos o comando docker container run -it debian:stable-slim, lembrando que a imagem pode ser chamada no formato <imagem>:<tag>.
+- Outra solução também pode ser com o uso do comando create, que cria o container, mas não o inicia imediatamente.
+- Primeiro utilizamos o comando docker container create -it debian:stable-slim, para criar um container. Como esse comando gera um CONTAINER ID, podemos utilizá-lo como referência para o segundo passo, com o comando start, como em docker container start -i <CONTAINER ID>, dessa forma, iniciamos o container no modo interativo.
+
+🚀 5. No terminal, você deve conseguir rodar o comando cat /etc/*-release, que vai retornar os dados da distribuição Debian que está sendo rodada dentro do contêiner.
+Solução
+Ao rodar o comando cat /etc/*-release foram retornados os dados corretos da distribuição estável do Debian (versão 11, codinome bullseye).
+
+🚀 6. Encerre o terminal.
+Solução
+Para encerrar o terminal interno do container, o comando exit foi utilizado.
+
+🚀 7. Verifique na sua lista de contêiners qual contêiner se refere ao exercício que acabou de praticar.
+🚀 8. Inicie o mesmo contêiner novamente, sem criar outro. Valide se ele está ativo na lista de contêiners.
+🚀 9. Retome o contêiner que foi criado anteriormente neste exercício.
+🚀 10. Rode o comando cat /etc/debian_version que deve retornar a versão atual do sistema do contêiner.
+🚀 11. Encerre o terminal.
+🚀 12. Remova somente o contêiner criado para esse exercício.
+[BÔNUS] 13. Crie e rode de modo interativo em modo ‘Cleanup’, a imagem andrius/ascii-patrol.
+[BÔNUS] 14. **Encerre o contêiner utilizando os botões [ctrl] + [c].
