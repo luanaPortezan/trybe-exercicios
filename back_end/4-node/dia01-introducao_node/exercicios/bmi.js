@@ -5,9 +5,13 @@
 const inputBmi = require('readline-sync');
 
 function calculatorBmi(weight, height) {
-  const bmi = weight / (height * height);
+  // const heightMeter = height /100;
+  // const bmi = weight / (heightMeter * heightMeter);
 
-  return bmi;
+  const bmi = weight / (height * height);
+    console.log(`Meu peso: ${weight}, minha altura: ${height}`);
+
+  return bmi.toFixed(1);
 };
 // console.log(calculatorBmi(weight, height));
 
@@ -15,12 +19,12 @@ function calculatorBmi(weight, height) {
 // ------- usando o pacote readline-sync para adicionar inputs de entrada -------
 
   function questionInput() {
-    const weight = inputBmi.questionInt('What’s your weight? ');
-    const height = inputBmi.questionInt('What’s your height? ');
-    // console.log(`seu peso: ${weight}, sua altura: ${height}`);
+    const weight = inputBmi.questionFloat('What’s your weight? ');
+    const height = inputBmi.questionFloat('What’s your height? ');
+    // const height = inputBmi.questionFloat
 
     const calculatorInput = calculatorBmi(weight, height); // chama a func anterior para calcular
-    console.log(`BMI: ${calculatorInput.toFixed(2)}`);
+      console.log(`BMI: ${calculatorInput}`);
     // return calculatorInput
 }
 questionInput();
