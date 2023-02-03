@@ -1,0 +1,21 @@
+- REST é um conjunto de boas práticas utilizadas durante a construção de uma API;
+- RESTful é um serviço web (desenvolvido por nós ou não) que segue as regras definidas pelo REST;
+
+As 5 restrições para ser RESTful
+Como o foco desse conteúdo não é a construção de APIs RESTful em detalhes, inclusive é um assunto que vai longe! Veja as cinco principais restrições REST com descrições simplificadas do que significam.
+
+1. Interface uniforme (Uniform Interface): respeitar um padrão para transferir informações;
+2. Arquitetura cliente-servidor: o REST quer nossa API organizada de forma que ela sirva a clientes gerenciando suas solicitações HTTP;
+3. Sem estado (stateless): entre uma requisição e outra, a API não armazena informações do cliente. Todas as requisições são independentes;
+4. Cacheable: requisições repetidas podem ser otimizadas, pois retornam os mesmos resultados;
+5. Sistema em camadas (Layered System): quem faz a requisição não vê as várias partes que fazem uma API - só a sua camada que gerencia requisições.
+
+
+------- REST no Express ---------
+
+Uma das vantagens de se usar o Express para construção de APIs é a organização das rotas, podendo separar as rotas pelo método (ou verbo) HTTP da requisição. Além disso, torna-se mais simples retornar um formato específico solicitado pelo cliente e/ou retornar um status HTTP.
+
+app.get(...)
+app.post(...)
+app.put(...)
+app.delete(...)

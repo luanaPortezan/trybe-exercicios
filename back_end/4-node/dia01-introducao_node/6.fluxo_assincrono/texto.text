@@ -1,0 +1,13 @@
+Agora que você já conhece um pouco sobre Node, vamos relembrar um conceito importante e que precisa estar bem consolidado: assincronicidade!
+
+Relembrando🧠: Assim como no front-end, as operações assíncronas são essenciais para as rotinas do back-end. Essas operações permitem que tarefas independentes sejam executadas em segundo plano, sem que o fluxo de execução aguarde pela finalização dessas tarefas. Essa prática contribui, principalmente, para tarefas que demandam maior tempo de execução.
+
+Existem duas formas principais para implementarmos código assíncrono em JavaScript, usando Callbacks e Promises.
+
+As Callbacks fornecem uma interface com a qual você pode dizer: “e quando terminar de fazer isso, faça aquilo”. Além de evitar uma espera desnecessária, essa operação permite que outras operações bloqueantes também sejam executadas ao mesmo tempo. 
+
+Apesar das Callbacks tornarem nosso código muito mais eficiente, elas também trazem alguns desafios para legibilidade do nosso código. O uso aninhado dessas funções pode dificultar a legibilidade do seu código, o Callback Hell. Para resolver o problema da chamada Callback Hell, podemos utilizar as Promises. Elas foram introduzidas ao JavaScript como estratégia para melhorar a legibilidade do código, basicamente uma forma de resolver a “bagunça” que as callbacks causavam. Quando usamos Promises, ainda estamos utilizando um tipo de callback, mas que possui uma interface mais legível e intuitiva.
+
+Em JavaScript, as Promises: uma promessa/função é criada e, dentro dela, existe um código/ação a ser executado. Se o código é executado sem nenhum problema, a Promise é resolvida por meio da função resolve; se algo de errado acontecer durante a execução, a Promise é rejeitada por meio da função reject.
+
+Uma promise pode se tornar resolvida com um valor ou rejeitada por algum motivo. Caso um estado de erro ocorra, o método catch do Promise é chamado. Esse método, por sua vez, chama o método de tratamento associado ao estado rejected. Caso o then ocorra, ele chama o método resolved.
