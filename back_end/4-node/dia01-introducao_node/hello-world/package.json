@@ -8,7 +8,7 @@
     "start": "node index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "portezan",
   "license": "ISC",
   "dependencies": {
     "readline-sync": "1.4.10"
