@@ -1,0 +1,31 @@
+version: '3'
+services:
+  node:
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+    image: node:16 # Imagem base do container
+    container_name: trybecash_api # Nome do container para facilitar execução
+    restart: always # Restarta a imagem caso algo a faça parar
+    working_dir: /app # Diretório padrão de execução
+    volumes:
+      # Lista de volumes (diretórios) mapeados de fora para dentro do container
+      - ./:/app # Monta o diretório atual, com todos os dados da aplicação, dentro do diretório /app
+    ports:
+      - 3000:3000 # Expõe a porta padrão da aplicação: altere aqui caso use outra porta na notação porta_de_fora:porta_de_dentro
+    depends_on:
+      - "database" # Informa ao docker, para que o container node seja iniciado após o container database
+    tty: true # deixar interativo
+
+  database: # serviço chamado database.
+    image: mysql:8.0.29 # Esse serviço inicializará um container Docker com a imagem do Servidor MySQL versão 8.0.29
+    restart: always # O parâmetro restart define a política de reinício do container como always. Assim, o container sempre será reiniciado automaticamente em caso de parada
+    environment:
+      # Na seção environment foi definido o valor de duas variáveis dentro do container:
+      MYSQL_ROOT_PASSWORD: root # Essa variável define a senha do usuário root do MySQL (será a senha que utilizaremos para acessar o MySQL);
+      MYSQL_DATABASE: trybecashdb # Essa variável define o nome do banco de dados que será criado ao iniciar MySQL, caso ele não exista.
+    ports:
+      # seção ports está vinculando uma porta do seu computador local (a porta 33060) a uma porta dentro do container (a porta 3306)
+      - "33060:3306" #  estamos utilizando a porta 33060 como a porta vinculada ao seu computador local com o container MySQL com a intenção de evitar um possível conflito de portas, caso você possua uma instalação do MySQL em seu computador usando a porta 3306!
+    volumes:
+      - ./trybecash_script.sql:/docker-entrypoint-initdb.d/trybecash_script.sql
