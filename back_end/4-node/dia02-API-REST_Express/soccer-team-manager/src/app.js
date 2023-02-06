@@ -26,6 +26,12 @@ app.use(express.json()); // habilita a possibilidade de recebermos dados pelo co
 // ----------  Listando times por meio do método GET ---------- 
 app.get('/teams', (req, res) => res.status(200).json({ teams }));
 
+// PARA TREINAR!!! Que tal treinar seus conhecimentos e listar um time pelo seu id? Crie um endpoint do tipo GET com a rota /teams/:id.
+// app.get('/teams/:id', (req, res) => {
+//   const team = teams.find(({ id }) => id === Number(req.params.id));
+//   res.status(200).json(team);
+// });
+
 // ---------- Cadastrando times por meio do método POST ----------
 app.post('/teams', (req, res) => {
   const newTeam = { ...req.body };
