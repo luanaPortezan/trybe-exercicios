@@ -94,3 +94,7 @@ Copiar
 🚀 Exercício 9
 Crie um endpoint do tipo DELETE com a rota /movies/:id que possa deletar um filme do JSON.
 
+🚀 Exercício 10
+Crie um endpoint do tipo GET com a rota /movies/search, que possa listar todos os filmes do JSON.
+
+A rota deve receber a informação por query e a chave deve-se chamar q. A chave vai trazer consigo valor de ‘gente’ por exemplo, e o filtro deve trazer apenas os filmes com esse termo, se não encontrar, traga um array vazio.
