@@ -1,0 +1,15 @@
+{
+  "name": "1-tsc",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Portezan",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "typescript": "^4.9.5"
+  }
+}
