@@ -1,0 +1,449 @@
+Relacionamentos N:N
+Nos relacionamentos N:N, existem algumas diferenças significativas ao se criar as associações. Esse tipo de relacionamento pode ser visto também como dois relacionamentos um para muitos (1:N) ligados por uma tabela intermediária, chamada de tabela de junção, a qual guarda as informações de como as tabelas se relacionam entre si.
+
+O diagrama abaixo será usado como exemplo:
+
+Representação de um banco N_N relacionamento nn e transactions
+Representação de um banco N:N
+Esse banco possui 3 tabelas: users, books e users_books. A tabela users_books possui um relacionamento N:N com as demais tabelas. Desta maneira, podemos concluir que:
+
+A tabela users guarda as informações de cada pessoa.
+A tabela books guarda as informações de cada livro.
+A tabela users_books irá agir como uma tabela de junção, guardando a relação de quais pessoas possuem quais livros. Nessa tabela, uma pessoa pode possuir vários livros, enquanto um livro pode pertencer a várias pessoas. Cadastramos o livro uma única vez na tabela books, assim como a pessoa na tabela users. Graças a essa tabela, um livro vai poder ser associado de forma livre a várias pessoas, assim como uma única pessoa poderá ser associada a vários livros.
+A tabela users_books possui dois campos compondo uma chave primária composta (Para entender melhor o conceito, acesse o conteúdo “Transformando ideias em um modelo de banco de dados”, em Database Design - Como modelar um banco de dados), justamente para evitar a redundância dos dados, já que a tabela não pode receber um conjunto de valores repetido (a pessoa a ser associada com o mesmo livro mais de uma vez).
+Bora começar? Para que possamos fazer o setup da aplicação, basta entrar em uma nova pasta e executar os comandos abaixo:
+
+Copiar
+npm init -y
+
+npm i -E express@4.17.1 nodemon@2.0.15 sequelize@6.3.4 mysql2@2.1.0 dotenv@8.2.0
+
+npm i -D -E sequelize-cli@6.2.0
+
+touch .sequelizerc
+echo -e "const path = require('path');
+
+module.exports = {
+    'config': path.resolve('src', 'config', 'config.js'),
+    'models-path': path.resolve('src', 'models'),
+    'seeders-path': path.resolve('src', 'seeders'),
+    'migrations-path': path.resolve('src', 'migrations'),
+};
+" >> .sequelizerc
+
+mkdir src
+
+(cd src && npx sequelize-cli init)
+
+mkdir src/controllers src/services
+touch src/app.js
+echo -e "const express = require('express');
+
+const app = express();
+
+app.use(express.json());
+
+module.exports = app;
+" >> src/app.js
+touch src/server.js
+
+echo -e "require('dotenv').config();
+
+const app = require('./app');
+const { PORT = 3001 } = process.env;
+
+app.listen(PORT, () => console.log(\`Ouvindo na porta \${PORT}\`));
+" >> src/server.js 
+
+touch src/services/userBook.service.js src/controllers/userBook.controller.js
+Feito isso, já podemos continuar pelo VS Code 🤟
+
+Agora, realize as configurações necessárias no seu projeto:
+
+Config: Converta seu arquivo config para um arquivo JavaScript e configure as credenciais de acesso para usarem variáveis de ambiente.
+
+Database: Crie o banco de dados com os nomes abaixo para cada situação:
+
+Para desenvolvimento: books_database_development;
+Para testes: books_database_test;
+Para produção: books_database_production;
+.env: Crie na raiz do projeto para configurar suas variáveis de ambiente.
+
+models/index: Lembre-se de configurar corretamente esse arquivo para utilizar o config.js.
+
+Tudo pronto! Então bora aprende como fazer as associações N:N na prática? 😎
+
+Uma pergunta importante:
+
+Como criamos uma associação que passa por 3 tabelas?
+
+Primeiro, vamos criar o model de User:
+
+Copiar
+// src/models/User.js
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define(
+  'User',
+  {
+    id: { type: DataTypes.INTEGER, primaryKey: true },
+    firstName: DataTypes.STRING,
+    lastName: DataTypes.STRING,
+    age: DataTypes.INTEGER,
+  },
+  {
+    timestamps: false,
+    underscored: true,
+  },
+);
+
+  return User;
+};
+Agora vamos ao model de Book:
+
+Copiar
+// src/models/Book.js
+module.exports = (sequelize, DataTypes) => {
+  const Book = sequelize.define(
+    'Book',
+    {
+      id: { type: DataTypes.INTEGER, primaryKey: true },
+      name: DataTypes.STRING,
+      releaseYear: DataTypes.INTEGER,
+      totalPages: DataTypes.INTEGER,
+    },
+    {
+      timestamps: false,
+      underscored: true,
+    }
+  );
+
+  return Book;
+};
+Certo, nada demais até o momento.
+
+Vamos agora criar o model de UserBook:
+
+Copiar
+// src/models/UserBook.js
+
+module.exports = (sequelize, _DataTypes) => {
+  const UserBook = sequelize.define(
+    'UserBook',
+    {},
+    {
+      timestamps: false,
+      underscored: true,
+      tableName: 'users_books',
+    },
+  );
+
+  return UserBook;
+};
+Primeiro de tudo, note que não temos nenhum atributo nesse model. Isso é possível porque quando estabelecemos os relacionamentos no banco de dados usando UserBook como tabela de associação, o Sequelize já entende que esse model precisa ter os IDs que formam a chave composta das duas tabelas sendo associadas.
+
+Para entender melhor as decisões que tomamos para configurar as options do sequelize.define underscored: para acessar a tabela referente a este model, UserBook (em PascalCase) vai ser transformado em snake_case e terá seu final pluralizado, transformando em “user_books” seu valor de acesso;
+
+tableName: decidimos definir o nome da tabela que esse model se refere, para mantermos o padrão de nomes do model no singular.
+
+Copiar
+// src/models/UserBook.js
+
+// module.exports = (sequelize, _DataTypes) => {
+//   const UserBook = sequelize.define(
+//     'UserBook',
+//     {},
+//     {
+//       timestamps: false,
+//       underscored: true,
+//       tableName: 'users_books',
+//     },
+
+  UserBook.associate = (models) => {
+    models.Book.belongsToMany(models.User, {
+      as: 'users',
+      through: UserBook,
+      foreignKey: 'bookId', // se refere ao id de Book na tabela de `users_books`
+      otherKey: 'userId', // se refere a outra chave de `users_books`
+    });
+    models.User.belongsToMany(models.Book, {
+      as: 'books',
+      through: UserBook,
+      foreignKey: 'userId', // se refere ao id de User na tabela de `users_books`
+      otherKey: 'bookId',
+    });
+  };
+
+// return UserBook;
+// };
+Depois, temos um novo tipo de relacionamento: o belongsToMany. Esse relacionamento cria um relacionamento do tipo N:N, utilizando o model especificado na opção through como tabela de associação. Temos também o alias daquela associação, na chave as e, por último, temos os parâmetros foreignKey e otherKey. Esses dois parâmetros dizem ao Sequelize qual campo utilizar na tabela de associação para identificar cada uma das entidades.
+
+Lembre-se: foreignKey sempre se refere ao model em que chamamos belongsToMany, enquanto otherKey se refere ao model com o qual estamos criando a associação.
+
+Para testar a aplicação, você deve fazer as devidas alterações nos controllers, criar as migrations e os seeders.
+
+Para criar as migrations, utilize os seguintes comandos:
+
+⚠️ Execute-os separadamente para evitar que o timestamp seja o mesmo para as migrations
+
+Copiar
+npx sequelize migration:generate --name create-books
+npx sequelize migration:generate --name create-users
+npx sequelize migration:generate --name create-users-books
+E copie o conteúdo abaixo para seus respectivos arquivos de migration, create-books, create-users e create-user-books:
+
+Copiar
+// cole esse código dentro do arquivo da migration "books"
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('books', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+      },
+      name: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      releaseYear: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        field: 'release_year', // só precisamos definir explicitamente os campos com nomes compostos, por causa da semelhança entre camelCase e snake_case
+      },
+      totalPages: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        field: 'total_pages', // ambos começam com letra minúscula, quando temos duas palavras que existe diferença
+      },
+    });
+  },
+
+  down: async (queryInterface, _Sequelize) => {
+    await queryInterface.dropTable('books');
+  },
+};
+Copiar
+// cole esse código dentro do arquivo da migration "users"
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('users', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+      },
+      firstName: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        field: 'first_name',
+      },
+      lastName: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        field: 'last_name',
+      },
+      age: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+      },
+    });
+  },
+
+  down: async (queryInterface, _Sequelize) => {
+    await queryInterface.dropTable('users');
+  },
+};
+💬 Como faço para criar uma chave primária composta em uma Migration do Sequelize?
+
+A forma mais simples de fazer isso é indicar quais campos farão parte dessa chave composta. Utilizando novamente o parâmetro primaryKey. No nosso exemplo, ao invés de usar um id único para tabela, teremos dois campos com parâmetro primaryKey: true, sendo userId e bookId:
+
+Copiar
+// cole esse código dentro do arquivo da migration "users-books"
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('users_books', {
+      userId: {
+        type: Sequelize.INTEGER,
+        field: 'user_id',
+        references: {
+          model: 'users',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+        primaryKey: true,
+      },
+      bookId: {
+        type: Sequelize.INTEGER,
+        field: 'book_id',
+        references: {
+          model: 'books',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+        primaryKey: true,
+      },
+    });
+  },
+
+  down: async (queryInterface, _Sequelize) => {
+    await queryInterface.dropTable('users_books');
+  },
+};
+O Sequelize vai interpretar mais de um campo com primaryKey, como sendo a parte de uma chave primária composta, impedindo que combinações repetidas possam ser inseridas nessa tabela! Note ainda, que esses campos também são chaves estrangeiras, dada suas referencias (references) a outras tabelas.
+
+Depois disso, teremos que criar as seeds com informações para podermos, enfim, testar nossa nova association:
+
+Para evitar problemas com a nomenclatura dos arquivos de seeds, rode os comandos a seguir separadamente.
+
+Copiar
+npx sequelize seed:generate --name books
+npx sequelize seed:generate --name users
+npx sequelize seed:generate --name user-books
+Copie os códigos abaixo para seus respectivos arquivos dentro da pasta seeders:
+
+Copiar
+// cole esse código dentro do arquivo da seed "books"
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    return queryInterface.bulkInsert(
+      'books',
+      [
+        { name: 'O que o sol faz com as flores', release_year: 2017, total_pages: 159 },
+        { name: 'Ensinando a transgredir: A educação como prática da liberdade', release_year: 2017, total_pages: 288 },
+        { name: 'Cem Anos de Solidão', release_year: 1967, total_pages: 419 },
+        { name: 'Primeiros Pesadelos', release_year: 2022, total_pages: 300 },
+      ],
+      {},
+    );
+  },
+
+  down: async (queryInterface, _Sequelize) => {
+    await queryInterface.bulkDelete('books', null, {});
+  },
+};
+Copiar
+// cole esse código dentro do arquivo da seed "users"
+
+module.exports = {
+  up: async (queryInterface, _Sequelize) => {
+    return queryInterface.bulkInsert(
+      'users',
+      [
+        {
+          first_name: 'Graciliano',
+          last_name: 'Ramos',
+          age: 61,
+        },
+        {
+          first_name: 'Brené',
+          last_name: 'Brown',
+          age: 56,
+        },
+        {
+          first_name: 'Djamila',
+          last_name: 'Ribeiro',
+          age: 42,
+        },
+      ],
+      {},
+    );
+  },
+
+  down: async (queryInterface, _Sequelize) => {
+    await queryInterface.bulkDelete('users', null, {});
+  },
+};
+Copiar
+// cole esse código dentro do arquivo da seed "user-books"
+
+module.exports = {
+  up: async (queryInterface, _Sequelize) => {
+    return queryInterface.bulkInsert(
+      'users_books',
+      [
+        { user_id: 1, book_id: 1 },
+        { user_id: 1, book_id: 3 },
+        { user_id: 2, book_id: 1 },
+        { user_id: 2, book_id: 2 },
+        { user_id: 3, book_id: 1 },
+        { user_id: 3, book_id: 2 },
+        { user_id: 3, book_id: 3 },
+      ],
+      {},
+    );
+  },
+
+  down: async (queryInterface, _Sequelize) => {
+    await queryInterface.bulkDelete('users_books', null, {});
+  },
+};
+Depois, utilize o comando abaixo para criar o banco, executar as migrations e as seeds:
+
+Copiar
+npx sequelize db:drop
+npx sequelize db:create
+npx sequelize db:migrate
+npx sequelize db:seed:all
+Vamos criar um service para recuperar todos os livros de um usuário pelo seu id:
+
+Copiar
+// src/services/userBook.service.js
+
+const { User, Book } = require('../models');
+
+const getUsersBooksById = (id) => User.findOne({
+  where: { id },
+  include: [{ model: Book, as: 'books', through: { attributes: [] } }],
+});
+
+module.exports = {
+  getUsersBooksById,
+};
+Agora seu controller:
+
+Copiar
+// src/controllers/userBook.controller.js
+
+const userBookService = require('../services/userBook.service');
+
+const getUsersBooksById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await userBookService.getUsersBooksById(id);
+
+    if (!user)
+      return res.status(404).json({ message: 'Pessoa não encontrada' });
+
+    return res.status(200).json(user);
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ message: 'Algo deu errado' });
+  }
+};
+
+module.exports = {
+  getUsersBooksById,
+};
+Para fazer a requisição, bastaria acrescentar ao src/app.js as seguintes linhas:
+
+Copiar
+// const express = require('express');
+const userBookController = require('./controllers/userBook.controller');
+
+// const app = express();
+// app.use(express.json());
+
+app.get('/userbooks/:id', userBookController.getUsersBooksById);
+
+// module.exports = app;
+Agora, faça uma requisição do tipo GET para o endpoint localhost:3001/userbooks/1 e verifique a resposta para a pessoa.
+
+Nota: a propriedade through: { attributes: [] } deve estar presente, pois sem ela, em cada book, apareceriam todos seus respectivos users. Tente fazê-lo sem e veja a diferença no resultado!

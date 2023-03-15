@@ -1,0 +1,446 @@
+Relacionamentos 1:1
+Antes de começar, analise o diagrama abaixo. Esse será o banco de dados que utilizaremos no primeiro exemplo.
+
+Representação de um banco 1:1
+Representação de um banco 1:1
+Podemos notar que existem duas tabelas nesse banco, employees e addresses. Cada employee possui um address, assim como cada address pertence a apenas um employee.
+
+Vamos criar um novo projeto para demonstrar esse exemplo. No dia anterior, você aprendeu todos os comandos que utilizaremos, vamos relembrá-los.
+
+Primeiro, abra seu terminal, depois crie um diretório, acesse-o e rode os comandos abaixo:
+
+Copiar
+npm init -y
+
+npm i -E express@4.17.1 nodemon@2.0.15 sequelize@6.3.4 mysql2@2.1.0 dotenv@8.2.0
+
+npm i -D -E sequelize-cli@6.2.0
+
+mkdir src && cd src
+
+npx sequelize-cli init
+Com a execução do script npx sequelize-cli init, criamos automaticamente o arquivo src/config/config.json. Contudo, modificaremos este arquivo de .json para .js e faremos os ajustes necessários para que ele utilize variáveis de ambiente para definir as configurações do acesso ao banco de dados. Portanto, vamos renomear esse arquivo para config.js e adicionar o seguinte código:
+
+Copiar
+// src/config/config.js
+
+require('dotenv').config();
+
+const config = {
+  username: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
+  host: process.env.MYSQL_HOST,
+  dialect: 'mysql',
+};
+
+module.exports = {
+  development: {
+    ...config,
+    database: 'employees_associations_development',
+  },
+  test: {
+    ...config,
+    database: 'employees_associations_test',
+    logging: false,
+  },
+  production: {
+    ...config,
+    database: 'employees_associations_production',
+  },
+};
+Veja que o código acima está fazendo uso das variáveis MYSQL_USER, MYSQL_PASSWORD e MYSQL_HOST. Essas variáveis precisam estar definidas no arquivo .env, a ser criado na raiz da aplicação, e preenchido com as suas credenciais de acesso ao MySQL, conforme o exemplo a seguir:
+
+Copiar
+// .env
+
+MYSQL_USER=root
+MYSQL_PASSWORD=password
+MYSQL_HOST=localhost
+PORT=3001
+Agora que já temos tudo configurado, só precisamos atualizar o arquivo src/models/index.js alterando o nome do arquivo de configuração. De: config.json para config.js, conforme o trecho de código abaixo:
+
+Copiar
+// src/models/index.js
+
+//const fs = require('fs');
+//const path = require('path');
+//const Sequelize = require('sequelize');
+//const basename = path.basename(__filename);
+//const env = process.env.NODE_ENV || 'development';
+const config = require(__dirname + '/../config/config.js')[env];
+//const db = {};
+
+//...
+Como estamos usando uma estrutura que contém a pasta src, vamos criar também um arquivo .sequelizerc na raiz da aplicação para garantir que nossos comandos do Sequelize possam ser executados em quaisquer diretórios da nossa aplicação. Para a estrutura do nosso exemplo, ele será:
+
+Copiar
+const path = require('path');
+
+module.exports = {
+  'config': path.resolve('src', 'config', 'config.js'),
+  'models-path': path.resolve('src', 'models'),
+  'seeders-path': path.resolve('src', 'seeders'),
+  'migrations-path': path.resolve('src', 'migrations'),
+};
+Após ajustar esses arquivos de configurações, precisamos criar o schema que conterá as nossas tabelas. Para fazer isso, utilize o comando abaixo:
+
+Copiar
+npx sequelize db:create
+Agora vamos criar as migrations e para criar a migration que será responsável pela tabela Employees, basta utilizar o comando:
+
+Copiar
+npx sequelize migration:generate --name create-employees
+Lembre-se que todas as migrations e seeds, quando criadas pelos comandos do Sequelize, têm um timestamp antes do nome do arquivo, lembre-se disso ao procurá-las!
+
+Abra a migration e substitua o código existente pelo seguinte código:
+
+Copiar
+// src/migrations/[timestamp]-create-employee.js
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    return queryInterface.createTable('employees', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+      },
+      firstName: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        field: 'first_name',
+      },
+      lastName: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        field: 'last_name',
+      },
+      age: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+      },
+    });
+  },
+
+  down: async (queryInterface, _Sequelize) => {
+    return queryInterface.dropTable('employees');
+  },
+};
+Agora vamos criar a migration responsável pela tabela Addresses utilizando o comando:
+
+Copiar
+npx sequelize migration:generate --name create-addresses
+Abra a migration e substitua seu conteúdo presente pelo seguinte código:
+
+Copiar
+// src/migrations/[timestamp]-create-addresses.js
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    return queryInterface.createTable('addresses', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+      },
+      city: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      street: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      number: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+      },
+      employeeId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        // Configuram o que deve acontecer ao atualizar ou excluir um usuário
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+        field: 'employee_id',
+        // Informa que o campo é uma Foreign Key (Chave estrangeira)
+        references: {
+          // Informa a tabela da referência da associação
+          model: 'employees',
+          // Informa a coluna da referência que é a chave correspondente
+          key: 'id',
+        },
+      },
+    });
+  },
+
+  down: async (queryInterface, _Sequelize) => {
+    return queryInterface.dropTable('addresses');
+  },
+};
+Repare que, agora, temos algumas informações novas sendo passadas para o Sequelize no momento de adicionar a coluna employeeId. Esses dados informam ao Sequelize que aquele campo deve ser uma _foreign key_. Vamos passar por cada um deles:
+
+references.model: indica qual tabela nossa foreign key está referenciando.
+references.key: indica qual coluna da tabela estrangeira deve ser utilizada para nossa foreign key.
+onUpdate e onDelete: configura o que deve acontecer ao atualizar ou excluir um usuário. Nesse caso, todos os endereços daquele usuário serão alterados ou excluídos.
+Essa migration cria uma foreign key na tabela addresses, que relaciona o campo employee_id dessa tabela ao campo id da tabela employees.
+
+Vamos executar o seguinte comando para gerar as migrations:
+
+Copiar
+npx sequelize db:migrate
+Ok, mas como criamos essa associação no sequelize? 🤔
+
+Com as migrations criadas, vamos para os models criar essas associações!
+
+Dentro da pasta models, crie o arquivo employee.model.js, que conterá a seguinte estrutura:
+
+Copiar
+// src/models/employee.model.js
+
+module.exports = (sequelize, DataTypes) => {
+  const Employee = sequelize.define('Employee', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    firstName: DataTypes.STRING,
+    lastName: DataTypes.STRING,
+    age: DataTypes.INTEGER,
+  },
+  {
+    timestamps: false, // remove a obrigatoriedade de utilizar os campos `createdAt` e `updatedAt`
+    tableName: 'employees',
+    underscored: true,
+  });
+
+  Employee.associate = (models) => {
+    Employee.hasOne(models.Address,
+      { foreignKey: 'employeeId', as: 'addresses' });
+  };
+
+  return Employee;
+};
+A função Employee.associate = (models) => {} que criamos é onde declararemos as associações daquele model. No nosso caso, estamos dizendo que a tabela Employees possui um Address, referenciado pela foreign key employee_id, o model Employee deve chamá-la de addresses (note a letra minúscula), como definido na propriedade as.
+
+Essa função é chamada pelo arquivo src/models/index.js, criado pelo comando npx sequelize-cli init que você executou ao começar o exemplo.
+
+Os métodos de criação de associações que o Sequelize disponibiliza são:
+
+hasOne
+belongsTo
+hasMany
+belongsToMany
+No caso de relacionamentos 1:1, utilizamos os métodos hasOne e belongsTo. A tradução literal desses métodos facilita o seu entendimento.
+
+hasOne = tem um belongsTo = pertencente a
+
+No model Address, por sua vez, temos que fazer o caminho inverso, declarando que o address pertence a Employee. Fazemos isso da seguinte forma:
+
+Copiar
+// src/models/address.model.js
+
+module.exports = (sequelize, DataTypes) => {
+  const Address = sequelize.define('Address', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    city: DataTypes.STRING,
+    street: DataTypes.STRING,
+    number: DataTypes.INTEGER,
+    employeeId: { type: DataTypes.INTEGER, foreignKey: true },
+    // A declaração da Foreign Key é opcional no model
+  },
+  {
+    timestamps: false,
+    tableName: 'addresses',
+    underscored: true,
+  });
+
+  Address.associate = (models) => {
+// define o tipo de relacionamento
+    Address.belongsTo(models.Employee,
+    // define qual a foreign key a ser criada
+      { foreignKey: 'employeeId', as: 'employees' });
+  };
+
+  return Address;
+};
+👀 De olho na dica: 👀
+
+Note que apesar do uso da Foreign Key ser opcional no model, é importante deixar explícito dentro da função associate qual o relacionamento será feito, e qual Foreign Key vai ser criada quando queremos criar uma Foreign Key.
+
+Validando relacionamentos 1:1
+Agora, vamos validar o relacionamento. Para isso, precisaremos criar seeders para inserirmos dados nas tabelas e um servidor para responder as requisições.
+
+Para criar os dois seeders, utilize os comandos abaixo:
+
+Copiar
+npx sequelize seed:generate --name employees
+npx sequelize seed:generate --name addresses
+Depois, abra o arquivo employees dentro da pasta seeders e copie o código a seguir:
+
+Copiar
+// src/seeders/[timestamp]-employees.js
+
+module.exports = {
+  up: async (queryInterface, _Sequelize) => {
+    return queryInterface.bulkInsert('employees',
+      [
+        {
+          first_name: 'Marcos',
+          last_name: 'Zuck',
+          age: 49,
+        },
+        {
+          first_name: 'Fred',
+          last_name: 'Mercurio',
+          age: 19,
+        },
+        {
+          first_name: 'Ayrton',
+          last_name: 'Keno',
+          age: 51,
+        },
+        {
+          first_name: 'Robin',
+          last_name: 'Mathias',
+          age: 63,
+        },
+      ],
+      {},
+    );
+  },
+
+  down: async (queryInterface, _Sequelize) => {
+    return queryInterface.bulkDelete('employees', null, {});
+  },
+};
+O arquivo addresses da pasta seeds deve conter o seguinte código:
+
+Copiar
+// src/seeders/[timestamp]-addresses.js
+
+module.exports = {
+  up: async (queryInterface, _Sequelize) => {
+    return queryInterface.bulkInsert('addresses',
+      [
+        {
+          city: 'Belo Horizonte',
+          street: 'Rua Flórida',
+          number: 1080,
+          employee_id: 1,
+        },
+        {
+          city: 'São Paulo',
+          street: 'Avenida Paulista',
+          number: 1980,
+          employee_id: 2,
+        },
+        {
+          city: 'Fortaleza',
+          street: 'Rua das Enseadas',
+          number: 95,
+          employee_id: 3,
+        },
+        {
+          city: 'Belo Horizonte',
+          street: 'Rua Andaluzita',
+          number: 131,
+          employee_id: 4,
+        },
+        {
+          city: 'Curitiba',
+          street: 'Rua Fria',
+          number: 101,
+          employee_id: 4,
+        },
+      ],
+      {},
+    );
+  },
+
+  down: async (queryInterface, _Sequelize) => {
+    return queryInterface.bulkDelete('addresses', null, {});
+  },
+};
+Depois, utilize o comando abaixo para executar os seeders:
+
+Copiar
+npx sequelize db:seed:all
+Existe uma possibilidade de você se deparar com o erro “Cannot add or update a child row: a foreign key constraint fails”. Isso acontece porque precisamos que a seed de employees rode primeiro que a de addresses, de forma de que a segunda possa pegar a chave que usa como foreign key da primeira.
+
+Contudo, como criamos as seeds juntas, as timestamps de ambas são iguais e elas acabam sendo executadas na ordem alfabética: primeiro addresses, depois employees, causando o erro. Para resolver isso de forma simples, basta renomear a seed de employees, tornando o número da timestamp menor que o de address e rodar o comando acima novamente.
+
+Por último, vamos criar o servidor para testarmos nossas associations. A grande diferença quando vamos fazer uma requisição que necessite da utilização de uma association com o Sequelize, é o campo include. Esse campo diz ao Sequelize quais serão as configurações da requisição. A propriedade model se refere a qual tabela será utilizada. Já a propriedade as deve ser igual à que declaramos no momento da criação da associação no respectivo model.
+
+Para finalmente podermos rodar nossa aplicação precisamos de mais alguns arquivos. Por isso, dentro de src criaremos os diretórios Services e Controllers e os preencheremos da seguinte forma:
+
+Copiar
+// src/services/employee.service.js
+
+const { Address, Employee } = require('../models/');
+
+const getAll = async () => {
+  const users = await Employee.findAll({
+    include: { model: Address, as: 'addresses' },
+  });
+
+  return users;
+};
+
+module.exports = { getAll };
+Copiar
+// src/controllers/employee.controller.js
+
+const EmployeeService = require('../services/employee.service');
+
+const getAll = async (_req, res) => {
+  try {
+    const employees = await EmployeeService.getAll();
+    return res.status(200).json(employees);
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ message: 'Ocorreu um erro' });
+  }
+};
+
+module.exports = {
+  getAll,
+};
+Agora, precisamos criar mais dois arquivos, dentro da pasta src, o app.js e o server.js. Seu preenchimento deve ficar assim:
+
+Copiar
+// src/app.js
+
+const express = require('express');
+
+const employee = require('./controllers/employee.controller');
+
+const app = express();
+
+app.use(express.json());
+
+app.get('/employees', employee.getAll);
+
+module.exports = app;
+Copiar
+// src/server.js
+
+require('dotenv').config();
+const app = require('./app');
+
+const PORT = process.env.PORT || 3001;
+
+app.listen(PORT, () => {
+  console.log(`Escutando na porta ${PORT}`);
+});
+Por fim, vamos fazer algumas pequenas alterações no package.json: definir nosso arquivo principal e criar um script para rodar a aplicação com o nodemon.
+
+Copiar
+// package.json
+{
+  // ...
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "nodemon src/server.js"
+  },
+  // ...
+}
+Agora, inicie o servidor com npm run dev, faça uma requisição do tipo GET para o endpoint localhost:3001/employees e verifique a resposta, na qual em cada um dos empregados (employees), aparecerá o respectivo endereço (address).
