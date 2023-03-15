@@ -1,0 +1,8 @@
+Exercícios - agora, a prática
+🚀 Se liga nesse foguete!
+
+Os exercícios destacados com 🚀 são os fundamentais pra você ir bem no projeto! Todos os exercícios vão contribuir com sua formação mas fique de olho nesses! 👀
+
+🚀 Você pode encontrar o repositório com os exercícios no link Exercício Sequelize Associations 1:1 e 1:N, leia o readme e siga as instruções.
+
+https://github.com/tryber/exercise-sequelize-associations-11-1n

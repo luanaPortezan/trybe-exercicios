@@ -1,0 +1,16 @@
+Eager Loading vs Lazy Loading
+Supondo o exemplo anterior, onde temos um banco com as tabelas Addresses e Employees, uma query do typo Lazy no model Addresses vai retornar um objeto do tipo Address, tal como é mostrado no diagrama de classes abaixo:
+
+Diagrama de classes do retorno de uma query Lazy Loading
+Diagrama de classes do retorno de uma query Lazy Loading
+Ou seja, será retornado um objeto de endereço onde existirá um campo com o id da pessoa colaboradora que mora neste endereço.
+
+Já numa query do tipo Eager, o resultado é um pouco diferente:
+
+Diagrama de classes do retorno de uma query Eager Loading v2
+Diagrama de classes do retorno de uma query Eager Loading
+Diferentemente de termos um número que representa o id da pessoa colaboradora que mora naquele endereço, recebemos um objeto do tipo Employee dentro do objeto do tipo Address. Isso acontece pois o banco faz o join das tabelas e já traz todos os dados, não só de Address, como também do Employee que vive nele.
+
+Com isso, é possível de imediato fazer um acesso ao primeiro nome de uma pessoa que mora em um determinado endereço por meio da sintaxe address.employee.firstName.
+
+Veja o exemplo em vídeo para entender melhor a diferença entre Eager Loading e Lazy Loading:

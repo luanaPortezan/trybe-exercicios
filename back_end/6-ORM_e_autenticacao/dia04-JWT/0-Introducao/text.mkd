@@ -1,0 +1,36 @@
+Introdução
+O que vamos aprender?
+Hoje você aprenderá o que é o JWT (JSON Web Token), por que utilizá-lo, sua importância, como criar uma API com autenticação JWT e cases de empresas que estão utilizando essa tecnologia!
+
+
+Você será capaz de:
+Entender o que há por dentro de um token de autenticação e autorização;
+
+Gerar tokens a partir de informações como login e senha;
+
+Autenticar pessoas usuárias utilizando o token JWT.
+
+Autorizar o acesso a rotas do Express, usando o token JWT.
+
+Por que isso é importante?
+O JWT é, definitivamente, uma maneira inteligente de obter a identidade de um usuário com segurança!
+
+Imagine que você tem uma aplicação em que você precisa verificar se a sessão de uma pessoa ainda está ativa, mesmo depois de ela ter desligado o computador/smartphone. E aí, como faz?
+
+Você poderia usar cookies. Atualmente, porém, usar cookies não é uma boa opção por várias razões:
+
+O usuário pode não aceitar seus cookies;
+Você não tem controle de onde ele está rodando;
+O site fica mais pesado dependendo de qual cookie você está usando;
+Etc.
+Uma alternativa é usar o JWT, que te disponibiliza um token/hash/código criptografado que você pode enviar para uma API e validá-lo como preferir.
+
+Além disso, essa tecnologia nos traz outros benefícios:
+
+Não utiliza banco de dados: Usar o JWT implica menos consultas ao banco de dados, o que nos dá um tempo de resposta menor. Caso você esteja usando serviços pagos que cobram por consulta, como o DynamoDB, o JWT poderá reduzir os custos de consumo.
+
+Mais simples de usar (se você for cuidadoso): Se seu projeto não tem uma arquitetura boa para administrar as sessões dos seus clientes, e seus princípios básicos de segurança não forem nítidos, o desenvolvimento usando JWT será bem mais rápido – considerando que você pode simplesmente usar alguma biblioteca existente.
+
+Utilizado em vários serviços: Você pode ter um servidor de autenticação que lida com o login/cadastro para gerar o token para a pessoa usuária. A partir daí, você pode transitar seu token entre várias aplicações, sendo necessário logar apenas uma vez e logo depois estar logado em todas as outras aplicações do seu sistema. No Google, por exemplo, você loga uma única vez e pode usar serviços como Google Drive, Gmail, Google Docs, Google Fotos, etc. sem precisar logar novamente.
+
+Uma ótima analogia para melhor compreensão do JWT é compará-lo à permissão de acesso aos camarotes de um show! Vamos lá! Imagine-se em um show do seu artista preferido onde somente quem tem a pulseira verde com o QRCode, pode ter acesso aos melhores camarotes espalhados pelo show. O Token gerado pelo JWT é o instrumento de autenticação, que podemos comparar exatamente a pulseira no seu braço. Então quando você quer ter acesso aos camarotes, os seguranças fazem a leitura do QRCode na pulseira verde que está no seu braço e autenticam que você tem permissão para entrar nos camarotes. O que podemos concluir é que o JWT não é propriamente uma ferramenta de segurança, mas algo que lhe permite ter acesso aos espaços reservados.
