@@ -1,0 +1,213 @@
+Sintaxe geral
+Vamos começar criando uma classe Animal e uma classe Mamífero, que herda de animal, e brincando um pouco com o uso.
+
+Como são muitos termos específicos em inglês, para este caso em específico será disponibilizado um dicionário informal:
+
+age: idade
+birth date: data de nascimento
+full year: ano completo (os 4 dígitos)
+mammal: mamífero
+name: nome
+walk: andar
+year: ano
+Copiar
+class Animal {
+  /*
+    Ao invés de declarar os atributos antes do construtor, receber parâmetros
+    no construtor e colocá-los nos atributos da classe, se não formos
+    validar, podemos utilizar uma forma simplificada de escrita, simplesmente
+    colocando o modificador de visibilidade na frente
+    do nome do parâmetro no construtor
+
+    Exemplo
+    O seguinte código:
+
+    public x: number
+    constructor(x: number) { this.x = x }
+
+    Pode ser substituído por:
+
+    constructor(public x: number) { }
+    
+    Obs: Usando essa sintaxe é necessário indicar explicitamente 
+    logo antes do nome do atributo se ele é public, private, protected ou readonly
+  */
+  constructor(public name: string, private birthDate: Date) { }
+
+  get age() {
+    /*Para operar com datas, vamos operar somente com milissegundos. Uma data
+    é o número de milissegundos desde o dia 01/01/1970 (era Unix).*/
+    const timeDiff = Math.abs(
+      Date.now() -
+      new Date(this.birthDate).getTime()
+    );
+
+    /*Convertendo de volta para o número de anos inteiros, considerando anos bissextos.
+    Tente entender a lógica abaixo: como converter de milissegundos para anos?*/
+    return Math.floor(timeDiff / (1000 * 3600 * 24) / 365.25);
+  }
+}
+
+class Mammal extends Animal {
+  walk() {
+    console.log(`${this.name} está andando!`);
+  }
+}
+
+const tiger = new Mammal(
+  'Tigre',
+  new Date(Date.parse('May 03, 2020')),
+);
+
+const main = (animal: Animal) => {
+  console.log(animal.age);
+}
+
+main(tiger);
+tiger.walk();
+
+/*
+Saída (código rodado em Mar/2022):
+1
+Tigre está andando!
+*/
+A sintaxe para criar uma classe que herda outra é bem simples, basta utilizar a palavra reservada extends.
+
+Observe que a função main espera receber um parâmetro do tipo Animal. Porém, o objeto passado para a função é o objeto tiger, que é do tipo Mammal. Isso ocorre pois todo Mammal é também um Animal, então qualquer parâmetro do tipo Animal pode receber um objeto de classes filhas. Essa é a grande vantagem do polimorfismo por subtipagem (ou herança).
+
+A função main, porém, só entende um objeto do tipo Animal. Por isso ela não consegue acessar nada restrito ao subtipo Mammal (também conhecida como classe filha ou subclasse)! Você vai obter um erro que diz “a propriedade ‘walk’ não existe no tipo Animal“.
+
+Copiar
+const main = (animal: Animal) => {
+  console.log(animal.age);
+  animal.walk(); // error: Property 'walk' does not exist on type 'Animal'.
+}
+
+main(tiger);
+Nada nos impede de criar uma nova classe Ave (Bird) que também herda de Animal e utilizá-la de forma similar, mas com suas especificidades (neste caso o método fly, voar):
+
+Copiar
+class Bird extends Animal {
+  fly() {
+    console.log(`${this.name} está voando!`);
+  }
+}
+
+const parrot = new Bird(
+  'Papagaio',
+  new Date(Date.parse('Jun 07, 2017')),
+);
+
+console.log(parrot.age);
+parrot.fly();
+
+/*
+Saída (código executado em Mar/2022):
+4
+Papagaio está voando!
+*/
+O vídeo abaixo mostra o uso de herança com classes:
+
+
+Para fixar:
+Que tal exercitar a sintaxe um pouco, com um breve exercício bem simples? Juro que parece muita coisa, mas não é!
+
+Crie uma classe chamada Superclass.
+
+A Superclass deve possuir um atributo público isSuper
+
+isSuper deve ser setado como true na inicialização.
+
+A Superclass deve possuir um método público chamado sayHello, que deve imprimir “Olá mundo!”.
+
+Crie uma classe chamada Subclass que herda da Superclass.
+
+Crie uma função myFunc fora do escopo da Subclass que recebe um objeto da Superclass.
+
+Dentro dessa função, chame o método sayHello do objeto passado como parâmetro.
+Crie um objeto da Superclass e outro da Subclass.
+
+Chame a função myFunc 2 vezes, passando os objetos criados.
+
+Vamos agora a alguns tópicos um pouco mais avançados, atributos protegidos e o uso do super.
+
+Atributos protegidos
+Observe que temos, na classe Animal, um atributo privado birthDate (data de nascimento). Você não pode acessar ou alterar este atributo fora da classe Animal.
+
+Copiar
+class Animal {
+  constructor(private birthDate: Date) { } // Repare no private
+
+}
+class Bird extends Animal {
+  showBirthDate() {
+    console.log(this.birthDate); // ERRO! birthDate é privado e não é visível pra subclasse Bird.
+  }
+}
+Entretanto, às vezes precisamos manter alguns atributos e métodos privados do mundo externo, mas possíveis de serem modificados dentro de subclasses. É aí que entra o protected.
+
+Copiar
+class Animal {
+  constructor(protected birthDate: Date) { } // Protected: classe filha pode ler e escrever, mas acessos externos não
+}
+class Bird extends Animal {
+  showBirthDate() {
+    console.log(this.birthDate); // Okay!
+  }
+}
+Para fixar:
+Com base no exemplo do exercício anterior:
+
+Comente a criação da instância da Superclass.
+
+Comente a chamada da função que recebe o objeto do tipo Superclass como argumento.
+
+Faça a função receber não mais um objeto da Superclass, mas sim da Subclass.
+
+Crie, na Subclass, um método público chamado sayHello2.
+
+Chame o método sayHello dentro do método sayHello2.
+
+Mude a visibilidade do método sayHello de public para protected.
+
+Ao mudar a visibilidade, o compilador (ou o vs code) vai mostrar um erro. Conserte esse erro utilizando o novo método sayHello2.
+
+Mude a visibilidade do método sayHello de protected para private. O que acontece?
+
+Obs: Desfaça estas alterações antes de fazer o próximo exercício, ou seja, deixe como estava ao final do primeiro exercício.
+
+Super
+Sempre que você, na subclasse, queira referenciar a superclasse, poderá utilizar a palavra reservada super. Super bacana, né? 🤣
+
+Deixando a gracinha de lado, vamos a um exemplo que não funciona:
+
+Copiar
+class Animal {
+  constructor(protected birthDate: Date) { }
+}
+class Bird extends Animal {
+  constructor(public name: string) { } // ERRO: constructor deve respeitar o contrato da superclasse
+}
+Em TypeScript, o método construtor de uma subclasse deve ser o mesmo da superclasse (os exemplos anteriores funcionaram pois não tinham o construtor), ou deve chamar o da superclasse.
+
+Agora vamos a um exemplo que funciona:
+
+Copiar
+class Animal {
+  constructor(protected birthDate: Date) { }
+}
+class Bird extends Animal {
+  constructor(public name: string) {
+    super(new Date());
+  }
+}
+O super é basicamente uma referência à superclasse. Ao ser invocado como uma função, está invocando o construtor da superclasse.
+
+Por fim, o super também é útil quando fazemos sobrescrita de métodos, um dos temas da próxima aula 😉.
+
+Para fixar:
+Com base no final do primeiro exercício de fixação:
+
+No construtor da Subclass, o atributo isSuper deve ser setado como false. Você vai precisar utilizar o super.
+
+Dentro da função que recebe um objeto da Superclass como parâmetro, cheque o valor do atributo isSuper e imprima no console “Super!” se for true e “Sub!” se for false;
