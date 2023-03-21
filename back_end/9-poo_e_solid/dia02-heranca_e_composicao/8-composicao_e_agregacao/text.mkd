@@ -1,0 +1,149 @@
+Composição e Agregação
+Composição
+Para compreender a composição precisamos pensar no relacionamento entre objetos/classes. Por exemplo, na rede social uma conta tem perfil, tem foto e tem texto. Veja abaixo como ficaria em um diagrama.
+
+diagrama-composicao
+Na imagem acima, é possível notar que perfil, foto e texto estão contidos em conta da rede social, ou seja, estabelece-se uma relação de dependência que se você remover a classe principal (conta) a classe secundária (perfil) deixará de fazer sentido, pois é necessário que seu perfil esteja vinculado a uma conta.
+
+Portanto, o segredo para entender se existe relação entre duas classes é se perguntar:
+
+“A classe Secundária (perfil) está contida na classe Principal (conta)?”.
+
+Se a resposta for sim, você tem uma composição. 🎉
+
+Anota aí 🖊: A composição de objetos/classes é uma forma de combinar objetos ou tipos de dados para construir sua estrutura.
+
+Agora você deve estar se perguntando:
+
+🤔 Qual a diferença entre composição e herança?
+
+A herança tem por característica obter todas as propriedades da classe principal. Com isso, você obtém todos os atributos e métodos, deixando a classe secundária mais especializada e específica. Isso quer dizer que se você precisar alterar algo na classe principal você vai refletir isso na sua classe secundária.
+
+Por outro lado, a composição permite que você realize alterações na classe principal sem afetar as demais envolvidas ou correr o risco de comprometer algum comportamento.
+
+Veja um exemplo no código abaixo e acompanhe a explicação.
+
+Copiar
+class Profile {
+  private name: string;
+  private email: string;
+
+  public setName(name: string) {
+    this.name = name;
+  }
+
+  public setEmail(email: string) {
+    this.email = email;
+  }
+
+  public toString(): string {
+    return `name - [${this.name}] - email - [${this.email}]`;
+  }
+}
+
+class SocialMediaAccount {
+  // Cria nossa composição com o perfil
+  private profile = new Profile();
+
+  public editProfile(name: string, email: string) {
+    this.profile.setName(name);
+    this.profile.setEmail(email);
+  }
+
+  public printProfile() {
+    console.log(this.profile.toString());
+  }
+}
+
+const socialMediaAccount = new SocialMediaAccount();
+socialMediaAccount.editProfile('Manuella', 'manu@trybe.com');
+socialMediaAccount.printProfile();
+No código acima, você possui a classe Profile que possui os métodos responsáveis por atualizar o nome e email do perfil. Em seguida, temos uma classe SocialMediaAccount que vai instanciar a classe Profile e ser utilizada no método editProfile para você editar o nome e email na respectiva conta da rede social. A ação de utilizarmos a classe do perfil (Profile) para compor a classe de conta da rede social (SocialMediaAccount) é conhecida por composição.
+
+Dessa forma, você tem a liberdade de realizar as alterações necessárias na classe principal(SocialMediaAccount) que não vai afetar diretamente a classe secundária (Profile). Além disso, note que se você remover a classe SocialMediaAccount o perfil da pessoa vai perder o sentido, pois um perfil obrigatoriamente precisa estar vinculado a uma conta. Concluímos assim que Profile tem dependência da existência de uma conta na rede social.
+
+O vídeo abaixo mostra o uso da composição.
+
+Bora dar uma olhada?
+
+
+Agregação
+Na agregação precisamos pensar no relacionamento entre objetos/classes, assim como na composição. No entanto é um relacionamento que fará parte e não obrigatoriamente dependerá de outro objeto/classe para continuar existindo.
+
+Veja esse conceito sendo aplicado no código abaixo:
+
+Copiar
+class Friend {
+  private nickname: string;
+
+  public getNickname(): string {
+    return this.nickname;
+  }
+
+  public setNickname(nickname: string) {
+    this.nickname = nickname;
+  }
+}
+
+class SocialMediaAccount {
+  private friends = new Array<Friend>();
+
+  public addFriend(friend: Friend) {
+    this.friends.push(friend);
+  }
+
+  public printFriends() {
+    this.friends.map((friend) => console.log(friend));
+  }
+}
+
+const socialMediaAccount = new SocialMediaAccount();
+
+const friendCarol = new Friend();
+friendCarol.setNickname('Carol');
+
+const friendFernando = new Friend();
+friendFernando.setNickname('Fernando');
+
+socialMediaAccount.addFriend(friendCarol);
+socialMediaAccount.addFriend(friendFernando);
+socialMediaAccount.printFriends();
+No código acima, você possui a classe Friend que possui os métodos responsáveis por atualizar o nickname de uma pessoa amiga. Em seguida, você tem uma classe SocialMediaAccount que possui um array de pessoas amigas e possui o método addFriend para adicionar novas pessoas amigas na respectiva conta da rede social. Por fim, você instância a classe SocialMediaAccount para representar uma conta e a classe Friend realizando a atualização de cada nickname para representar as duas pessoas amigas que você gostaria de adicionar na conta.
+
+Agora, note que se você remover a classe SocialMediaAccount a classe Friend vai continuar fazendo sentido, pois se você deletar uma conta da pessoa usuária ainda será possível atualizar pessoas amigas ou essas pessoas amigas serem adicionadas em contas de outras pessoas usuárias.
+
+Portanto, na agregação os objetos podem existir sem depender do outro objeto, por outro lado, na composição os objetos dependem da existência do outro objeto.
+
+Veja o vídeo a seguir para entender melhor a diferença entre Herança e Composição:
+
+
+Bora praticar!?
+
+Para fixar:
+Crie uma interface Logger.
+
+Logger deve possuir um método log, que recebe um parâmetro do tipo string e não retorna nada (void).
+
+Crie uma classe ConsoleLogger que implementa Logger. Você deve imaginar como o método log deve ser implementado, né? 😁.
+
+Crie uma classe ConsoleLogger2 igual à classe anterior, apenas a título de exemplo.
+
+No console.log dentro do método log, diferencie o ConsoleLogger2 do ConsoleLogger.
+
+Crie uma interface Database.
+
+Database deve possuir um atributo do tipo Logger.
+
+Database deve possuir um método save, que recebe dois parâmetros, key e value, ambos strings, e não retorna nada (void).
+
+Crie uma classe ExampleDatabase que implementa Database.
+
+ExampleDatabase deve receber o Logger como parâmetro do construtor, e possuir como valor padrão um ConsoleLogger.
+
+Dentro do método save, chame a função log do Logger passado para o database para fazer o log dos parâmetros passados para a save.
+
+Crie um objeto de cada um dos Loggers.
+
+Crie três objetos da ExampleDatabase, cada um dos dois primeiros recebendo um dos Loggers, e o último não recebendo nenhum.
+
+Utilize todos eles para salvar um conteúdo fictício.

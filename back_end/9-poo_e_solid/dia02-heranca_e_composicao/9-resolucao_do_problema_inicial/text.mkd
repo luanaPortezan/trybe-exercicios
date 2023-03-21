@@ -1,0 +1,141 @@
+Resolução do problema inicial
+Lembra do probleminha que você parou para pensar em como resolver no começo da aula? Acha que agora já tem uma ideia de como resolver?
+
+Aqui vai uma sugestão de resolução, só para fixar o aprendizado. Leia com calma, e por uns bons minutos!
+
+initial problem
+Ilustração das classes e interface da aplicação
+Dada a quantidade expressiva de termos em inglês, mais um dicionário informal:
+
+clause: cláusula
+contract: contrato
+describe: descrever
+legal person: pessoa jurídica
+person: pessoa
+natural person: pessoa física
+sale(s): venda(s)
+sign: assinar
+signatory/signatories: assinante, assinantes (do contrato)
+subject: assunto (do contrato)
+O código para a resolução do problema está logo abaixo, mas antes, confira o motivo de usarmos interface e/ou classe (herança):
+
+Interface Contract:
+
+Será o nosso contrato, algo que nos guiará em relação às regras de negócio;
+É importante ser utilizada quando sabemos quais atributos e/ou métodos devem ser utilizados e são imprescindíveis para a implementação da nossa classe;
+As interfaces não necessariamente contêm todos os elementos que precisam ser implementados em uma classe. Contudo, elas funcionam como um guia para o cumprimento das regras de negócio. Ainda é possível definir métodos e atributos adicionais, ou ainda criar várias interfaces, cada uma relacionada a regras específicas, e implementá-las em uma mesma classe;
+No exemplo abordado, os atributos subject, clause, signatories e o método describe são importantes para a regra em questão e estão sendo implementados na classe SalesContract. Entretanto, além desses elementos, outros métodos também são implementados. O que nos mostra, que por mais que venhamos a definir um contrato com elementos específicos, ainda temos a flexibilidade de fazer ajustes e implementações.
+Herança - classe Person:
+
+Permite a reutilização do código, visto que todas as declarações da classe mãe (superclasse), com exceção de elementos privados, são herdadas;
+Aumenta o acoplamento do código, pois alterações na implementação em uma superclasse podem afetar as suas subclasses. Por exemplo, a adição, remoção ou alteração de métodos e propriedades pode provocar bugs caso não sejam planejadas com cautela;
+No exemplo abordado, as classes NaturalPerson e LegalPerson herdam de Person. Observe que ambas as classes filhas mantêm o padrão de receberem parâmetro name e de reutilizar o método getter name. Este é um exemplo reduzido, mas que nos mostra o quanto a herança pode ser útil.
+Copiar
+interface Contract {
+  subject: string;
+  clauses: string[];
+  signatories: Person[];
+  describe(): void;
+}
+
+class Person {
+  private _name;
+  constructor(name: string) {
+    this._name = name;
+  }
+  get name() { return this._name; }
+}
+
+class NaturalPerson extends Person {
+  private _cpf;
+  constructor(name: string, cpf: string) {
+    super(name);
+    this._cpf = cpf;
+  }
+  get cpf() { return this._cpf; }
+}
+
+class LegalPerson extends Person {
+  private _cnpj;
+  constructor(name: string, cnpj: string) {
+    super(name);
+    this._cnpj = cnpj;
+  }
+}
+
+class SalesContract implements Contract {
+  private _signatories: Person[];
+  private _clauses: string[];
+
+  constructor() {
+    this._signatories = [];
+    this._clauses = [];
+  }
+
+  get signatories() { return [...this._signatories]; }
+  get clauses() { return [...this._clauses]; }
+  get subject() { return "Sales"; }
+
+  sign(signatory: Person) { this._signatories.push(signatory); }
+  addClause(clause: string) {
+    if (this._signatories.length > 0) return;
+    this._clauses.push(clause);
+  }
+
+  describe() {
+    console.log('--------------------');
+    console.log(`Contrato: ${this.subject}`);
+    this.clauses.forEach((clause) => { console.log(`Cláusula: ${clause}`) });
+    this.signatories.forEach((signatory) => { console.log(`Assinado por: ${signatory.name}`) });
+    console.log('--------------------\n');
+  }
+}
+
+const s1 = new SalesContract();
+const pp1 = new NaturalPerson('Tony', '123456789');
+const pp2 = new NaturalPerson('Lilly', '987654321');
+const lp = new LegalPerson('International Sales SA', '23961237162378');
+
+s1.describe();
+s1.addClause('Foo');
+s1.addClause('Bar');
+s1.describe();
+s1.sign(pp1);
+s1.sign(pp2);
+s1.describe();
+s1.addClause('Baz');
+s1.sign(lp);
+s1.describe();
+
+/*
+Saída:
+--------------------
+Contrato: Sales
+--------------------
+
+--------------------
+Contrato: Sales
+Cláusula: Foo
+Cláusula: Bar
+--------------------
+
+--------------------
+Contrato: Sales
+Cláusula: Foo
+Cláusula: Bar
+Assinado por: Tony
+Assinado por: Lilly
+--------------------
+
+--------------------
+Contrato: Sales
+Cláusula: Foo
+Cláusula: Bar
+Assinado por: Tony
+Assinado por: Lilly
+Assinado por: International Sales SA
+--------------------
+ */
+Existem muitas validações que não foram feitas, visto que é só um exemplo, mas já dá pra ter uma ideia de como os conceitos de herança e interfaces facilitam a vida, não é?
+
+Se quiser, brinque um pouco criando novos tipos de contratos e implemente mais funcionalidades 😎.
