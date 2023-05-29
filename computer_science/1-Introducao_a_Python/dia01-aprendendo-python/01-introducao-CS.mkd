@@ -1,0 +1,24 @@
+Introdução - Ciência da Computação
+
+O que vamos aprender?
+
+Fazendo uma analogia entre a construção de uma casa e aprender programação, ao estudar sobre (front-end e back-end) aprendemos como construir a nossa “casa online”. 🏠
+
+Uma casa poder ser bonita por fora, com telhado ornamentado e uma varanda, por exemplo. Entretanto, caso não tenha uma base sólida, possivelmente vai cair.
+
+Não queremos que nosso conhecimento sobre programação caia, tal qual uma casa com a base frágil, não é mesmo!? Por isso, chegou o momento de aprender sobre a base de tudo que vimos até agora e continuaremos vendo!
+
+Ciência da Computação
+Agora que você já passou pelos módulos de Fundamentos, Front-end e Back-end, chegou a hora de somar ao seu conhecimento o módulo de Ciência da Computação!
+
+Confira as etapas que vamos seguir durante esse módulo:
+
+Vamos começar nos aventurando por mais uma linguagem de programação! Estudaremos Python no módulo de Ciência da Computação.
+
+Em seguida, estudaremos como os algoritmos funcionam, são classificados e como conversamos sobre suas qualidades e performance. Veremos alguns exemplos de ordenação e busca e estudaremos estratégias para resolver todo tipo de desafio!
+
+Por fim, porém não menos importante, estudaremos um repertório de estruturas de dados clássicas. Estruturas de dados são como componentes para nossos algoritmos, nos ajudando a construir soluções rapidamente e com qualidade.
+
+De olho na dica👀: Toda pessoa programadora precisa conhecer um repertório de estruturas de dados clássicas. Você talvez já conheça algumas.
+
+Vamos começar!
